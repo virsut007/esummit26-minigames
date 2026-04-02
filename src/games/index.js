@@ -26,9 +26,9 @@ export const GAMES = [
     available:   true,
   },
   {
-    id:          'space',
-    name:        'SPACE RAID',
-    description: 'Coming soon...',
-    available:   false,
+    id:          'tetris',
+    name:        'TETRIS',
+    description: 'Stack \u0026 clear lines!',
+    available:   true,
   },
 ]

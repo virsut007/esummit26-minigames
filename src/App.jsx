@@ -9,6 +9,7 @@ import Leaderboard   from './components/Leaderboard'
 import DinosaurGame  from './games/DinosaurGame/DinosaurGame'
 import FlappyGame    from './games/FlappyGame/FlappyGame'
 import SnakeGame     from './games/SnakeGame/SnakeGame'
+import TetrisGame    from './games/TetrisGame/TetrisGame'
 
 function LoadingScreen() {
   return (
@@ -25,6 +26,7 @@ function renderGame(currentGame, props) {
     case 'dinosaur': return <DinosaurGame {...props} />
     case 'flappy':   return <FlappyGame   {...props} />
     case 'snake':    return <SnakeGame    {...props} />
+    case 'tetris':   return <TetrisGame   {...props} />
     default:
       return (
         <div className="text-center py-16">
