@@ -25,4 +25,10 @@ export const GAMES = [
     description: 'Coming soon...',
     available:   false,
   },
+  {
+    id:          'space',
+    name:        'SPACE RAID',
+    description: 'Coming soon...',
+    available:   false,
+  },
 ]

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { GAMES } from '../games'
 
-export default function Header({ user, onSignOut, currentGame, onSelectGame }) {
+export default function Header({ user, onSignOut, currentGame, onSelectGame, onHome }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
@@ -11,8 +11,18 @@ export default function Header({ user, onSignOut, currentGame, onSelectGame }) {
         {/* ── Top bar ── */}
         <div className="flex items-center justify-between py-2.5 sm:py-3 gap-2 sm:gap-3">
 
-          {/* Logo */}
+          {/* Logo / Home */}
           <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+            {onHome && (
+              <button
+                onClick={onHome}
+                className="font-pixel text-[9px] text-arcade-gray border-2 border-arcade-gray/50
+                           px-2 py-1.5 hover:border-arcade-green hover:text-arcade-green transition-all mr-1"
+                title="Back to home"
+              >
+                ← HOME
+              </button>
+            )}
             <span className="font-pixel text-arcade-green text-[11px] sm:text-sm md:text-base
                              drop-shadow-[0_0_8px_#50fa7b]">
               MINI

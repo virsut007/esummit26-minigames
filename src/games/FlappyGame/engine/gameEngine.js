@@ -50,8 +50,9 @@ export class FlappyEngine {
     this.skin    = null
     this.skinImg = null
 
-    this._raf  = null
-    this._loop = this._loop.bind(this)
+    this._raf    = null
+    this._lastTs = null
+    this._loop   = this._loop.bind(this)
   }
 
   setSkin(skin, img) {
@@ -88,6 +89,7 @@ export class FlappyEngine {
     this.pipes     = []
     this.groundOff = 0
     this.pipeTimer = 0
+    this._lastTs   = null
     this._seedClouds()
     this._raf = requestAnimationFrame(this._loop)
   }
@@ -100,9 +102,12 @@ export class FlappyEngine {
   // ─── Idle bob animation ────────────────────────────────────────────────────
 
   _idleBob() {
-    const draw = () => {
+    let lastTs = null
+    const draw = (ts) => {
       if (this.state !== 'idle') return
-      this.idleTick++
+      const delta = lastTs === null ? 1 : Math.min((ts - lastTs) / (1000 / 60), 3)
+      lastTs = ts
+      this.idleTick += delta
       this._renderIdle(this.idleTick)
       this._idleRaf = requestAnimationFrame(draw)
     }
@@ -115,16 +120,18 @@ export class FlappyEngine {
 
   // ─── Game Loop ─────────────────────────────────────────────────────────────
 
-  _loop() {
-    this._update()
+  _loop(ts) {
+    const delta = this._lastTs === null ? 1 : Math.min((ts - this._lastTs) / (1000 / 60), 3)
+    this._lastTs = ts
+    this._update(delta)
     this._render()
     if (this.state === 'playing') {
       this._raf = requestAnimationFrame(this._loop)
     }
   }
 
-  _update() {
-    this.frame++
+  _update(delta) {
+    this.frame += delta
 
     // Dynamic speed & gap (difficulty scaling)
     const speed = Math.min(INITIAL_SPEED + this.score * 0.18, 8)
@@ -132,18 +139,18 @@ export class FlappyEngine {
 
     // ── Bird physics ──
     const b = this.bird
-    b.vy += GRAVITY
-    b.y  += b.vy
+    b.vy += GRAVITY * delta
+    b.y  += b.vy * delta
 
     // Wing flap animation
-    b.wingTimer++
+    b.wingTimer += delta
     if (b.wingTimer >= 7) {
       b.wingTimer = 0
       b.wingFrame = (b.wingFrame + 1) % 3
     }
 
     // ── Pipes ──
-    this.pipeTimer++
+    this.pipeTimer += delta
     if (this.pipeTimer >= PIPE_INTERVAL) {
       this._spawnPipe(gap)
       this.pipeTimer = 0
@@ -151,7 +158,7 @@ export class FlappyEngine {
 
     this.pipes = this.pipes.filter(p => p.x + PIPE_W > -10)
     for (const p of this.pipes) {
-      p.x -= speed
+      p.x -= speed * delta
 
       // Score — passed the pipe
       if (!p.scored && p.x + PIPE_W < BIRD_X) {
@@ -174,14 +181,14 @@ export class FlappyEngine {
     }
 
     // ── Clouds ──
-    for (const c of this.clouds) c.x -= speed * 0.2
+    for (const c of this.clouds) c.x -= speed * 0.2 * delta
     this.clouds = this.clouds.filter(c => c.x + c.w > -30)
     if (this.clouds.length < 4 && Math.random() < 0.006) {
       this.clouds.push({ x: GAME_W + 20, y: 30 + Math.random() * 180, w: 50 + Math.random() * 60 })
     }
 
     // ── Ground scroll ──
-    this.groundOff = (this.groundOff + speed) % 20
+    this.groundOff = (this.groundOff + speed * delta) % 20
   }
 
   _spawnPipe(gap) {

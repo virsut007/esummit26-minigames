@@ -3,6 +3,7 @@ import { useAuth }   from './hooks/useAuth'
 import { useScores } from './hooks/useScores'
 
 import AuthModal     from './components/Auth/AuthModal'
+import LandingPage   from './components/LandingPage'
 import Header        from './components/Header'
 import Leaderboard   from './components/Leaderboard'
 import DinosaurGame  from './games/DinosaurGame/DinosaurGame'
@@ -33,6 +34,7 @@ function renderGame(currentGame, props) {
 
 export default function App() {
   const { user, loading, domainError, signInWithGoogle, signOut } = useAuth()
+  const [page,        setPage]        = useState('landing')   // 'landing' | 'game'
   const [currentGame, setCurrentGame] = useState('dinosaur')
 
   const { scores, loading: scoresLoading, saveScore } = useScores(user, currentGame)
@@ -44,6 +46,19 @@ export default function App() {
       <AuthModal
         onSignInWithGoogle={signInWithGoogle}
         domainError={domainError}
+      />
+    )
+  }
+
+  if (page === 'landing') {
+    return (
+      <LandingPage
+        user={user}
+        onSignOut={signOut}
+        onSelectGame={(id) => {
+          setCurrentGame(id)
+          setPage('game')
+        }}
       />
     )
   }
@@ -63,6 +78,7 @@ export default function App() {
         onSignOut={signOut}
         currentGame={currentGame}
         onSelectGame={setCurrentGame}
+        onHome={() => setPage('landing')}
       />
 
       <main className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 md:px-6 py-5 sm:py-8">
@@ -72,7 +88,7 @@ export default function App() {
 
       <footer className="text-center py-4 border-t-2 border-arcade-gray/20 mt-4">
         <p className="font-pixel text-arcade-gray text-[9px] sm:text-xs">
-          MINI ARCADE © 2025
+          SUMMIT × APOGEE MINI ARCADE © 2025
         </p>
       </footer>
     </div>

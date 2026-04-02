@@ -50,8 +50,9 @@ export class DinoEngine {
     this.skin    = null   // active skin object
     this.skinImg = null   // preloaded HTMLImageElement for image skins
 
-    this._raf  = null
-    this._loop = this._loop.bind(this)
+    this._raf    = null
+    this._lastTs = null
+    this._loop   = this._loop.bind(this)
   }
 
   // ─── Public API ────────────────────────────────────────────────────────────
@@ -88,6 +89,7 @@ export class DinoEngine {
     this.obstacleCounter = 0
     this.nextObstacleIn  = 90
     this.groundOff       = 0
+    this._lastTs         = null
     this._raf = requestAnimationFrame(this._loop)
   }
 
@@ -102,16 +104,18 @@ export class DinoEngine {
 
   // ─── Game Loop ─────────────────────────────────────────────────────────────
 
-  _loop() {
-    this._update()
+  _loop(ts) {
+    const delta = this._lastTs === null ? 1 : Math.min((ts - this._lastTs) / (1000 / 60), 3)
+    this._lastTs = ts
+    this._update(delta)
     this._render()
     if (this.state === 'playing') {
       this._raf = requestAnimationFrame(this._loop)
     }
   }
 
-  _update() {
-    this.frame++
+  _update(delta) {
+    this.frame += delta
 
     // Speed ramps up every 400 frames (+0.7 each step, capped at 16)
     this.speed = Math.min(INITIAL_SPEED + Math.floor(this.frame / 400) * 0.7, 16)
@@ -121,15 +125,15 @@ export class DinoEngine {
     // ── Dino physics ──
     const d = this.dino
     if (!d.onGround) {
-      d.vy += GRAVITY
-      d.y  += d.vy
+      d.vy += GRAVITY * delta
+      d.y  += d.vy * delta
       if (d.y >= GROUND_Y - DINO_H) {
         d.y        = GROUND_Y - DINO_H
         d.vy       = 0
         d.onGround = true
       }
     } else {
-      d.legTimer++
+      d.legTimer += delta
       if (d.legTimer >= 8) {
         d.legTimer = 0
         d.legFrame = (d.legFrame + 1) % 2
@@ -137,10 +141,10 @@ export class DinoEngine {
     }
 
     // ── Ground scroll offset ──
-    this.groundOff = (this.groundOff + this.speed) % 20
+    this.groundOff = (this.groundOff + this.speed * delta) % 20
 
     // ── Obstacles ──
-    this.obstacleCounter++
+    this.obstacleCounter += delta
     if (this.obstacleCounter >= this.nextObstacleIn) {
       this._spawnObstacle()
       this.obstacleCounter = 0
@@ -149,7 +153,7 @@ export class DinoEngine {
 
     this.obstacles = this.obstacles.filter(o => o.x + o.w > -30)
     for (const obs of this.obstacles) {
-      obs.x -= this.speed
+      obs.x -= this.speed * delta
       if (this._hits(d, obs)) {
         this._die()
         return
@@ -157,7 +161,7 @@ export class DinoEngine {
     }
 
     // ── Clouds ──
-    for (const c of this.clouds) c.x -= this.speed * 0.22
+    for (const c of this.clouds) c.x -= this.speed * 0.22 * delta
     this.clouds = this.clouds.filter(c => c.x + c.w > -30)
     if (this.clouds.length < 3 && Math.random() < 0.008) {
       this.clouds.push({ x: GAME_W + 20, y: 20 + Math.random() * 90, w: 50 + Math.random() * 50 })
