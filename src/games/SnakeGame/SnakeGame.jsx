@@ -73,11 +73,6 @@ export default function SnakeGame({ user, saveScore, scores, scoresLoading }) {
     }
   }, [])
 
-  // ── D-pad button ─────────────────────────────────────────────────────────
-  const dpad = useCallback((dx, dy) => {
-    engineRef.current?.setDirection(dx, dy)
-  }, [])
-
   const handlePlayAgain = useCallback(() => {
     setGameOver(false)
     setLiveScore(0)
@@ -85,7 +80,7 @@ export default function SnakeGame({ user, saveScore, scores, scoresLoading }) {
   }, [])
 
   return (
-    <div className="flex flex-col gap-4 sm:gap-5">
+    <div className="flex flex-col gap-3 sm:gap-5">
       {/* Title bar */}
       <div className="flex items-center justify-between">
         <h2 className="font-pixel text-arcade-green text-xs sm:text-sm drop-shadow-[0_0_6px_#50fa7b]">
@@ -96,7 +91,7 @@ export default function SnakeGame({ user, saveScore, scores, scoresLoading }) {
 
       {/* Canvas */}
       <div className="relative border-2 sm:border-4 border-arcade-green shadow-[0_0_16px_#50fa7b44]
-                      w-full max-w-[600px] mx-auto">
+                      w-full max-w-[320px] sm:max-w-[500px] mx-auto">
         <canvas
           ref={canvasRef}
           onTouchStart={onTouchStart}
@@ -108,47 +103,10 @@ export default function SnakeGame({ user, saveScore, scores, scoresLoading }) {
       </div>
 
       {/* Instructions */}
-      <p className="hidden sm:block font-pixel text-arcade-gray text-[9px] sm:text-xs text-center">
-        ARROW KEYS / WASD to move
+      <p className="font-pixel text-arcade-gray text-[8px] sm:text-xs text-center">
+        <span className="hidden sm:inline">ARROW KEYS / WASD to move</span>
+        <span className="sm:hidden">SWIPE to move</span>
       </p>
-
-      {/* ── D-pad — mobile only ─────────────────────────────────────────────── */}
-      <div className="sm:hidden flex flex-col items-center gap-1 select-none"
-           style={{ touchAction: 'manipulation' }}>
-        {/* Up */}
-        <button onTouchStart={() => dpad(0, -1)}
-          className="font-pixel text-base text-arcade-green border-2 border-arcade-green
-                     w-14 h-14 flex items-center justify-center
-                     active:bg-arcade-green active:text-arcade-bg transition-all">
-          ▲
-        </button>
-        {/* Left · Right */}
-        <div className="flex gap-1">
-          <button onTouchStart={() => dpad(-1, 0)}
-            className="font-pixel text-base text-arcade-green border-2 border-arcade-green
-                       w-14 h-14 flex items-center justify-center
-                       active:bg-arcade-green active:text-arcade-bg transition-all">
-            ◀
-          </button>
-          <div className="w-14 h-14" /> {/* spacer */}
-          <button onTouchStart={() => dpad(1, 0)}
-            className="font-pixel text-base text-arcade-green border-2 border-arcade-green
-                       w-14 h-14 flex items-center justify-center
-                       active:bg-arcade-green active:text-arcade-bg transition-all">
-            ▶
-          </button>
-        </div>
-        {/* Down */}
-        <button onTouchStart={() => dpad(0, 1)}
-          className="font-pixel text-base text-arcade-green border-2 border-arcade-green
-                     w-14 h-14 flex items-center justify-center
-                     active:bg-arcade-green active:text-arcade-bg transition-all">
-          ▼
-        </button>
-        <p className="font-pixel text-arcade-gray text-[8px] mt-1">
-          SWIPE or use D-PAD
-        </p>
-      </div>
 
       {scores.length > 0 && (
         <div className="bg-arcade-panel border-2 border-arcade-gray/40 p-3 sm:p-4">

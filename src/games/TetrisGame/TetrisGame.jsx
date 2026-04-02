@@ -89,13 +89,6 @@ export default function TetrisGame({ user, saveScore, scores, scoresLoading }) {
     }
   }, [])
 
-  // ── Button handlers ──────────────────────────────────────────────────────
-  const btn = useCallback((action) => {
-    const eng = engineRef.current
-    if (!eng || !eng.running) return
-    eng[action]()
-  }, [])
-
   const handlePlayAgain = useCallback(() => {
     setGameOver(false)
     setLiveScore(0)
@@ -105,7 +98,7 @@ export default function TetrisGame({ user, saveScore, scores, scoresLoading }) {
   }, [])
 
   return (
-    <div className="flex flex-col gap-4 sm:gap-5">
+    <div className="flex flex-col gap-3 sm:gap-5">
       {/* Title bar */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h2 className="font-pixel text-arcade-purple text-xs sm:text-sm drop-shadow-[0_0_6px_#bd93f9]">
@@ -126,7 +119,7 @@ export default function TetrisGame({ user, saveScore, scores, scoresLoading }) {
 
       {/* Canvas — 1:2 aspect ratio */}
       <div className="relative border-2 sm:border-4 border-arcade-purple shadow-[0_0_16px_#bd93f944]
-                      w-full max-w-[300px] mx-auto">
+                      w-full max-w-[200px] sm:max-w-[300px] mx-auto">
         <canvas
           ref={canvasRef}
           onTouchStart={onTouchStart}
@@ -137,57 +130,11 @@ export default function TetrisGame({ user, saveScore, scores, scoresLoading }) {
         {gameOver && <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} />}
       </div>
 
-      {/* Desktop instructions */}
-      <p className="hidden sm:block font-pixel text-arcade-gray text-[9px] sm:text-xs text-center">
-        ← → MOVE &nbsp; ↑ ROTATE &nbsp; ↓ SOFT DROP &nbsp; SPACE HARD DROP
+      {/* Instructions */}
+      <p className="font-pixel text-arcade-gray text-[8px] sm:text-xs text-center">
+        <span className="hidden sm:inline">← → MOVE &nbsp; ↑ ROTATE &nbsp; ↓ SOFT DROP &nbsp; SPACE HARD DROP</span>
+        <span className="sm:hidden">TAP to rotate · SWIPE to move · SWIPE ↓ to drop</span>
       </p>
-
-      {/* ── Mobile controls ─────────────────────────────────────────────────── */}
-      <div className="sm:hidden flex flex-col items-center gap-2 select-none"
-           style={{ touchAction: 'manipulation' }}>
-
-        {/* Row 1: Rotate */}
-        <button onTouchStart={() => btn('rotate')}
-          className="font-pixel text-[10px] text-arcade-purple border-2 border-arcade-purple
-                     w-16 h-12 flex items-center justify-center
-                     active:bg-arcade-purple active:text-arcade-bg transition-all">
-          ↻ ROT
-        </button>
-
-        {/* Row 2: Left · Down · Right */}
-        <div className="flex gap-2">
-          <button onTouchStart={() => btn('moveLeft')}
-            className="font-pixel text-base text-arcade-green border-2 border-arcade-green
-                       w-14 h-14 flex items-center justify-center
-                       active:bg-arcade-green active:text-arcade-bg transition-all">
-            ◀
-          </button>
-          <button onTouchStart={() => btn('moveDown')}
-            className="font-pixel text-base text-arcade-yellow border-2 border-arcade-yellow
-                       w-14 h-14 flex items-center justify-center
-                       active:bg-arcade-yellow active:text-arcade-bg transition-all">
-            ▼
-          </button>
-          <button onTouchStart={() => btn('moveRight')}
-            className="font-pixel text-base text-arcade-green border-2 border-arcade-green
-                       w-14 h-14 flex items-center justify-center
-                       active:bg-arcade-green active:text-arcade-bg transition-all">
-            ▶
-          </button>
-        </div>
-
-        {/* Row 3: Hard drop */}
-        <button onTouchStart={() => btn('hardDrop')}
-          className="font-pixel text-[10px] text-arcade-red border-2 border-arcade-red
-                     px-6 h-12 flex items-center justify-center
-                     active:bg-arcade-red active:text-arcade-bg transition-all">
-          ⬇ DROP
-        </button>
-
-        <p className="font-pixel text-arcade-gray text-[8px] mt-1">
-          TAP canvas to rotate · SWIPE ↓ to drop
-        </p>
-      </div>
 
       {scores.length > 0 && (
         <div className="bg-arcade-panel border-2 border-arcade-gray/40 p-3 sm:p-4">
