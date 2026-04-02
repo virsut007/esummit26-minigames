@@ -10,9 +10,9 @@ const BIRD_H            = 26
 const GRAVITY           = 0.46
 const FLAP_FORCE        = -9.2
 const PIPE_W            = 64
-const INITIAL_GAP       = 158
+const INITIAL_GAP       = 185
 const INITIAL_SPEED     = 3
-const PIPE_INTERVAL     = 105   // frames between pipe spawns
+const PIPE_INTERVAL     = 118   // frames between pipe spawns
 // ─────────────────────────────────────────────────────────────────────────────
 
 function makeBird() {
@@ -141,7 +141,7 @@ export class FlappyEngine {
 
     // Dynamic speed & gap (difficulty scaling)
     const speed = Math.min(INITIAL_SPEED + this.score * 0.18, 8)
-    const gap   = Math.max(INITIAL_GAP   - this.score * 2, 110)
+    const gap   = Math.max(INITIAL_GAP   - this.score * 2, 130)
 
     // ── Bird physics ──
     const b = this.bird
