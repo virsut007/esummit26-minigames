@@ -3,10 +3,10 @@ import { DinoEngine, GAME_W, GAME_H } from './engine/gameEngine'
 import GameOverModal from '../../components/GameOverModal'
 import { SKINS }    from '../skins'
 
-// ── Hoarding / Billboard Configuration ────────────────────────────────────────
-// Drop your poster image into /public/ads/ and set the path below.
-// The hoarding fills the space below the game canvas — like a highway billboard.
-const HOARDING_SRC = null   // e.g. '/ads/hoarding.jpg'
+// ── Billboard Configuration ───────────────────────────────────────────────────
+// Drop your hoarding image into /public/ads/ and set the path.
+// The billboard appears as a compact strip below the game canvas.
+const BILLBOARD_SRC = null   // e.g. '/ads/hoarding.jpg'
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function DinosaurGame({
@@ -78,19 +78,16 @@ export default function DinosaurGame({
   }, [])
 
   return (
-    // Full height flex column — fills the main area with no scroll
     <div className="flex-1 flex flex-col overflow-hidden">
 
-      {/* Score bar */}
-      <div className="flex items-center justify-between px-3 py-1.5 flex-shrink-0">
-        <span className="font-pixel text-arcade-green text-[10px] drop-shadow-[0_0_6px_#50fa7b]">
-          DINO RUN
-        </span>
+      {/* Score bar — slim */}
+      <div className="flex items-center justify-between px-3 py-1 flex-shrink-0">
+        <span className="font-pixel text-arcade-green text-[10px] drop-shadow-[0_0_6px_#50fa7b]">DINO RUN</span>
         <span className="font-pixel text-arcade-yellow text-[10px]">{liveScore}</span>
       </div>
 
-      {/* Canvas — full width, no horizontal padding so it truly fills the screen */}
-      <div className="relative border-y-2 border-arcade-green shadow-[0_0_12px_#50fa7b44] flex-shrink-0">
+      {/* ── Canvas — edge to edge, fills as much height as possible ── */}
+      <div className="relative border-y-2 border-arcade-green shadow-[0_0_16px_#50fa7b55] flex-shrink-0">
         <canvas
           ref={canvasRef}
           onClick={handleTap}
@@ -107,55 +104,61 @@ export default function DinosaurGame({
         TAP to jump
       </p>
 
-      {/* ── Hoarding / Billboard — fills all remaining screen space ── */}
-      <div className="flex-1 min-h-0 mx-3 mb-3 border-2 border-arcade-yellow/60
-                      shadow-[0_0_16px_#f1fa8c33] overflow-hidden">
-        {HOARDING_SRC ? (
-          <img
-            src={HOARDING_SRC}
-            alt="Event hoarding"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          /* Temp highway hoarding design */
-          <div
-            className="w-full h-full flex flex-col items-center justify-center gap-3 relative overflow-hidden"
-            style={{
-              background: 'linear-gradient(180deg, #1a1a2e 0%, #0f0f23 60%, #1a1a2e 100%)',
-            }}
-          >
-            {/* Road lines texture */}
-            <div
-              className="absolute inset-0 opacity-10"
-              style={{
-                backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 40px, #f1fa8c 40px, #f1fa8c 44px)',
-              }}
-            />
-            {/* Corner bolts */}
-            <div className="absolute top-2 left-2 w-3 h-3 rounded-full bg-arcade-yellow/40 border border-arcade-yellow/60" />
-            <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-arcade-yellow/40 border border-arcade-yellow/60" />
-            <div className="absolute bottom-2 left-2 w-3 h-3 rounded-full bg-arcade-yellow/40 border border-arcade-yellow/60" />
-            <div className="absolute bottom-2 right-2 w-3 h-3 rounded-full bg-arcade-yellow/40 border border-arcade-yellow/60" />
+      {/* ── Billboard — compact strip, full width, like a highway hoarding ── */}
+      <div className="flex-1 min-h-0 overflow-hidden flex-shrink-0 mx-0" style={{ maxHeight: 130 }}>
+        <Billboard src={BILLBOARD_SRC} />
+      </div>
 
-            {/* Content */}
-            <p className="font-pixel text-arcade-gray text-[8px] tracking-widest z-10">PRESENTS</p>
-            <div className="text-center z-10">
-              <p className="font-pixel text-arcade-green text-2xl drop-shadow-[0_0_16px_#50fa7b]">
-                E-SUMMIT
-              </p>
-              <p className="font-pixel text-arcade-gray text-[9px] my-1">×</p>
-              <p className="font-pixel text-arcade-purple text-2xl drop-shadow-[0_0_16px_#bd93f9]">
-                APOGEE
-              </p>
-              <p className="font-pixel text-arcade-yellow text-lg mt-1 drop-shadow-[0_0_12px_#f1fa8c]">
-                2026
-              </p>
-            </div>
-            <p className="font-pixel text-arcade-gray/60 text-[7px] tracking-widest z-10">
-              MINI ARCADE
-            </p>
-          </div>
-        )}
+    </div>
+  )
+}
+
+function Billboard({ src }) {
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt="Event billboard"
+        className="w-full h-full object-cover"
+      />
+    )
+  }
+
+  // Temp highway hoarding design
+  return (
+    <div
+      className="w-full h-full flex items-center justify-center relative overflow-hidden"
+      style={{ background: '#0a0a1a', borderTop: '3px solid #f1fa8c', borderBottom: '3px solid #f1fa8c' }}
+    >
+      {/* Rivet bolts in corners */}
+      {[['top-1 left-2'], ['top-1 right-2'], ['bottom-1 left-2'], ['bottom-1 right-2']].map(([pos], i) => (
+        <div key={i} className={`absolute ${pos} w-2.5 h-2.5 rounded-full bg-arcade-yellow/30 border border-arcade-yellow/50`} />
+      ))}
+
+      {/* Left event block */}
+      <div className="flex items-center gap-4 px-5 w-full justify-between">
+        <div className="text-left flex-shrink-0">
+          <p className="font-pixel text-arcade-green text-sm leading-none drop-shadow-[0_0_8px_#50fa7b]">E-SUMMIT</p>
+          <p className="font-pixel text-arcade-gray text-[8px] mt-0.5">×</p>
+          <p className="font-pixel text-arcade-purple text-sm leading-none drop-shadow-[0_0_8px_#bd93f9]">APOGEE</p>
+        </div>
+
+        {/* Divider */}
+        <div className="w-px self-stretch bg-arcade-yellow/30 flex-shrink-0" />
+
+        {/* Center CTA */}
+        <div className="text-center flex-1">
+          <p className="font-pixel text-arcade-yellow text-lg leading-none drop-shadow-[0_0_12px_#f1fa8c]">2026</p>
+          <p className="font-pixel text-arcade-gray text-[7px] mt-1 tracking-widest">MINI ARCADE</p>
+        </div>
+
+        {/* Divider */}
+        <div className="w-px self-stretch bg-arcade-yellow/30 flex-shrink-0" />
+
+        {/* Right tagline */}
+        <div className="text-right flex-shrink-0">
+          <p className="font-pixel text-arcade-cyan text-[9px] leading-relaxed">PLAY.<br />COMPETE.<br />WIN.</p>
+        </div>
       </div>
     </div>
   )
