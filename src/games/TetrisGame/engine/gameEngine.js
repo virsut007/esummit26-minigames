@@ -51,9 +51,6 @@ export class TetrisEngine {
 
   init() {
     this._resize()
-    this._resizeObs = new ResizeObserver(() => { this._resize(); if (this.running || this.gameOver) this._draw() })
-    // Observe the parent (the bordered div) which has a known CSS size
-    this._resizeObs.observe(this.canvas.parentElement)
     this.startGame()
   }
 
@@ -109,7 +106,6 @@ export class TetrisEngine {
 
   destroy() {
     this._stopLoop()
-    this._resizeObs?.disconnect()
   }
 
   /* ── game loop ───────────────────────────────────────────────────────────── */
@@ -245,21 +241,23 @@ export class TetrisEngine {
   /* ── rendering ───────────────────────────────────────────────────────────── */
 
   _resize() {
-    const rect  = this.canvas.parentElement.getBoundingClientRect()
-    // Cap to 90% of screen height so we don't overflow on flex layouts
-    const maxH  = Math.min(rect.height || 500, window.innerHeight * 0.82)
-    const maxW  = rect.width || 200
-    const cellH = Math.floor(maxH / ROWS)
-    const cellW = Math.floor(maxW / COLS)
-    this.cell   = Math.max(1, Math.min(cellH, cellW))
-    const w     = this.cell * COLS
-    const h     = this.cell * ROWS
+    // Compute cell size from window so the board fills the phone screen.
+    // Leave ~80px for the top header + score bar.
+    const availH = window.innerHeight - 80
+    const availW = window.innerWidth
+    const cellH  = Math.floor(availH / ROWS)
+    const cellW  = Math.floor(availW / COLS)
+    this.cell    = Math.max(1, Math.min(cellH, cellW))
 
-    this.canvas.width  = w * devicePixelRatio
-    this.canvas.height = h * devicePixelRatio
+    const w = this.cell * COLS
+    const h = this.cell * ROWS
+    const dpr = devicePixelRatio || 1
+
+    this.canvas.width  = w * dpr
+    this.canvas.height = h * dpr
     this.canvas.style.width  = w + 'px'
     this.canvas.style.height = h + 'px'
-    this.ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0)
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
   }
 
   _draw() {
