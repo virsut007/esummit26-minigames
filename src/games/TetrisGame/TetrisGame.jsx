@@ -115,13 +115,12 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
   }, [])
 
   return (
-    <div className="flex-1 flex flex-col items-center overflow-hidden px-3 py-1">
+    // Flex column that fills all available height — no scroll
+    <div className="flex-1 flex flex-col overflow-hidden">
 
-      {/* Title bar */}
-      <div className="flex items-center justify-between w-full mb-1.5 flex-shrink-0 flex-wrap gap-1">
-        <h2 className="font-pixel text-arcade-purple text-[10px] drop-shadow-[0_0_6px_#bd93f9]">
-          TETRIS
-        </h2>
+      {/* Score bar */}
+      <div className="flex items-center justify-between px-3 py-1 flex-shrink-0 flex-wrap gap-1">
+        <h2 className="font-pixel text-arcade-purple text-[10px] drop-shadow-[0_0_6px_#bd93f9]">TETRIS</h2>
         <div className="flex gap-3">
           <span className="font-pixel text-arcade-yellow text-[9px]">
             SCORE <span className="text-[10px]">{liveScore}</span>
@@ -135,23 +134,27 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
         </div>
       </div>
 
-      {/* Canvas — 1:2 aspect ratio */}
-      <div className="relative border-2 border-arcade-purple shadow-[0_0_14px_#bd93f944]
-                      flex-shrink-0" style={{ width: 'min(48vw, 220px)' }}>
-        <canvas
-          ref={canvasRef}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          className="block w-full cursor-pointer select-none"
-          style={{ touchAction: 'none', aspectRatio: '1 / 2' }}
-        />
-        {gameOver && (
-          <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} />
-        )}
+      {/* Canvas container — flex-1 fills remaining height; engine reads this to size the board */}
+      <div className="flex-1 min-h-0 flex justify-center">
+        <div
+          className="relative border-2 border-arcade-purple shadow-[0_0_14px_#bd93f966] h-full"
+          style={{ aspectRatio: '1 / 2' }}
+        >
+          <canvas
+            ref={canvasRef}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            className="block cursor-pointer select-none"
+            style={{ touchAction: 'none', display: 'block' }}
+          />
+          {gameOver && (
+            <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} />
+          )}
+        </div>
       </div>
 
-      <p className="font-pixel text-arcade-gray text-[8px] text-center mt-2 flex-shrink-0">
+      <p className="font-pixel text-arcade-gray text-[8px] text-center py-1 flex-shrink-0">
         TAP rotate · SWIPE to move · SWIPE ↓ hard drop
       </p>
     </div>

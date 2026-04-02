@@ -88,19 +88,19 @@ export default function LandingPage({
 
         {/* ── Game Selection ── */}
         <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-pixel text-arcade-gray text-[9px] tracking-widest">
-              ── SELECT YOUR GAME ──
-            </h2>
-            <button
-              onClick={onLeaderboard}
-              className="font-pixel text-[9px] text-arcade-yellow border-2 border-arcade-yellow
-                         px-2 py-1 hover:bg-arcade-yellow hover:text-arcade-bg transition-all
-                         flex items-center gap-1"
-            >
-              🏆 SCORES
-            </button>
-          </div>
+          {/* Prominent leaderboard button */}
+          <button
+            onClick={onLeaderboard}
+            className="w-full font-pixel text-xs text-arcade-bg bg-arcade-yellow border-2 border-arcade-yellow
+                       py-3 mb-4 hover:bg-arcade-green hover:border-arcade-green transition-all
+                       shadow-[0_0_14px_#f1fa8c55] flex items-center justify-center gap-2"
+          >
+            🏆 HALL OF FAME — VIEW ALL SCORES
+          </button>
+
+          <h2 className="font-pixel text-arcade-gray text-[9px] tracking-widest text-center mb-4">
+            ── SELECT YOUR GAME ──
+          </h2>
           <div className="grid grid-cols-2 gap-3">
             {GAMES.map(game => (
               <GameCard key={game.id} game={game} onSelect={onSelectGame} />

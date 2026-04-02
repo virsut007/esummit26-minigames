@@ -246,7 +246,7 @@ export class TetrisEngine {
   _resize() {
     const rect  = this.canvas.parentElement.getBoundingClientRect()
     // Tetris is tall: cols × rows = 10 × 20, aspect 1:2
-    const maxH  = Math.min(rect.height || 600, 600)
+    const maxH  = rect.height || 600
     const maxW  = rect.width
     const cellH = Math.floor(maxH / ROWS)
     const cellW = Math.floor(maxW / COLS)

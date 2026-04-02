@@ -71,7 +71,7 @@ export default function SnakeGame({ user, saveScore, currentGame }) {
   }, [])
 
   return (
-    <div className="flex-1 flex flex-col items-center overflow-hidden px-3 py-1">
+    <div className="flex-1 flex flex-col items-center px-4 py-1">
 
       {/* Score bar */}
       <div className="flex items-center justify-between w-full mb-1.5 flex-shrink-0">
@@ -79,9 +79,9 @@ export default function SnakeGame({ user, saveScore, currentGame }) {
         <span className="font-pixel text-arcade-yellow text-[10px]">{liveScore}</span>
       </div>
 
-      {/* Canvas — square, full width within padded container */}
-      <div className="relative border-2 border-arcade-green shadow-[0_0_14px_#50fa7b44]
-                      w-full flex-shrink-0" style={{ maxWidth: 'min(100%, 380px)' }}>
+      {/* Canvas — square, padded enough so border+shadow render fully */}
+      <div className="relative border-2 border-arcade-green shadow-[0_0_10px_#50fa7b66]
+                      w-full flex-shrink-0" style={{ maxWidth: 360 }}>
         <canvas
           ref={canvasRef}
           onTouchStart={onTouchStart}
