@@ -101,7 +101,7 @@ export default function LandingPage({
           <h2 className="font-pixel text-arcade-gray text-[9px] tracking-widest text-center mb-4">
             ── SELECT YOUR GAME ──
           </h2>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-2">
             {GAMES.map(game => (
               <GameCard key={game.id} game={game} onSelect={onSelectGame} />
             ))}

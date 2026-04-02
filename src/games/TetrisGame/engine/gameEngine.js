@@ -51,7 +51,8 @@ export class TetrisEngine {
 
   init() {
     this._resize()
-    this._resizeObs = new ResizeObserver(() => { this._resize(); this._draw() })
+    this._resizeObs = new ResizeObserver(() => { this._resize(); if (this.running || this.gameOver) this._draw() })
+    // Observe the parent (the bordered div) which has a known CSS size
     this._resizeObs.observe(this.canvas.parentElement)
     this.startGame()
   }
@@ -245,12 +246,12 @@ export class TetrisEngine {
 
   _resize() {
     const rect  = this.canvas.parentElement.getBoundingClientRect()
-    // Tetris is tall: cols × rows = 10 × 20, aspect 1:2
-    const maxH  = rect.height || 600
-    const maxW  = rect.width
+    // Cap to 90% of screen height so we don't overflow on flex layouts
+    const maxH  = Math.min(rect.height || 500, window.innerHeight * 0.82)
+    const maxW  = rect.width || 200
     const cellH = Math.floor(maxH / ROWS)
     const cellW = Math.floor(maxW / COLS)
-    this.cell   = Math.min(cellH, cellW)
+    this.cell   = Math.max(1, Math.min(cellH, cellW))
     const w     = this.cell * COLS
     const h     = this.cell * ROWS
 
