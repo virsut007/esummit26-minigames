@@ -7,7 +7,18 @@
       "Bash(git add:*)",
       "Bash(git commit -m ':*)",
       "Bash(git push:*)",
-      "Bash(node -e \"require\\('./node_modules/html2canvas/dist/html2canvas.min.js'\\); console.log\\('ok'\\)\")"
+      "Bash(node -e \"require\\('./node_modules/html2canvas/dist/html2canvas.min.js'\\); console.log\\('ok'\\)\")",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img1.png\" -o public/char-idle.png)",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img2.png\" -o public/char-run1.png)",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img3.png\" -o public/char-run2.png)",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img4.png\" -o public/char-jump.png)",
+      "Bash(ls public/char-*.png)",
+      "Bash(curl -L \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img1.png\" -o char-idle.png)",
+      "Bash(curl -L \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img2.png\" -o char-run1.png)",
+      "Bash(curl -L \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img3.png\" -o char-run2.png)",
+      "Bash(curl -L \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img4.png\" -o char-jump.png)",
+      "Bash(ls -la *.png)"
     ]
   }
 }

@@ -6,24 +6,24 @@ export default function Header({ user, onSignOut, currentGame, onSelectGame, onH
 
   return (
     <header className="bg-arcade-panel border-b-4 border-arcade-green flex-shrink-0">
-      <div className="max-w-5xl mx-auto px-3">
+      <div className="max-w-5xl mx-auto px-3 md:px-6">
 
         {/* ── Top bar ── */}
-        <div className="flex items-center justify-between py-2 gap-2">
+        <div className="flex items-center justify-between py-2 md:py-3 gap-2">
 
           {/* Logo / Home */}
           <div className="flex items-center gap-1.5 flex-shrink-0">
             {onHome && (
               <button
                 onClick={onHome}
-                className="font-pixel text-[9px] text-arcade-gray border-2 border-arcade-gray/50
+                className="font-pixel text-[9px] md:text-[10px] text-arcade-gray border-2 border-arcade-gray/50
                            px-2 py-1 hover:border-arcade-green hover:text-arcade-green transition-all mr-1"
               >
                 ← HOME
               </button>
             )}
-            <span className="font-pixel text-arcade-green text-[11px] drop-shadow-[0_0_8px_#50fa7b]">MINI</span>
-            <span className="font-pixel text-arcade-yellow text-[11px] drop-shadow-[0_0_8px_#f1fa8c]">ARCADE</span>
+            <span className="font-pixel text-arcade-green text-[11px] sm:text-sm drop-shadow-[0_0_8px_#50fa7b]">MINI</span>
+            <span className="font-pixel text-arcade-yellow text-[11px] sm:text-sm drop-shadow-[0_0_8px_#f1fa8c]">ARCADE</span>
           </div>
 
           {/* Desktop game nav */}
@@ -84,7 +84,7 @@ function GameButtons({ currentGame, onSelectGame }) {
       key={game.id}
       onClick={() => game.available && onSelectGame(game.id)}
       disabled={!game.available}
-      className={`font-pixel text-[9px] px-2 py-1 border-2 transition-all whitespace-nowrap
+      className={`font-pixel text-[9px] md:text-[10px] px-2 md:px-3 py-1 border-2 transition-all whitespace-nowrap
         ${game.available
           ? currentGame === game.id
             ? 'bg-arcade-green text-arcade-bg border-arcade-green'

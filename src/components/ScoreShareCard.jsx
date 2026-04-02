@@ -117,6 +117,25 @@ const ScoreShareCard = forwardRef(function ScoreShareCard(
         pointerEvents: 'none',
       }} />
 
+      {/* ── Character image — dino game only, right side ── */}
+      {gameName === 'dinosaur' && (
+        <img
+          src="/char-idle.png"
+          alt=""
+          crossOrigin="anonymous"
+          style={{
+            position: 'absolute',
+            right: '0px',
+            bottom: '65px',
+            height: '270px',
+            width: 'auto',
+            zIndex: 3,
+            pointerEvents: 'none',
+            filter: `drop-shadow(-8px 0 22px ${theme.glow}60)`,
+          }}
+        />
+      )}
+
       {/* ── All visible content (above overlays) ── */}
       <div style={{
         position: 'relative', zIndex: 1,

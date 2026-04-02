@@ -47,7 +47,7 @@ export default function AllLeaderboards({ onBack }) {
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-lg mx-auto px-4 py-6 flex flex-col gap-6">
+      <main className="flex-1 w-full max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto px-4 md:px-8 lg:px-12 py-6 md:py-8 flex flex-col gap-6 md:gap-8">
 
         {loading ? (
           <p className="font-pixel text-arcade-green text-xs text-center animate-blink py-8">
@@ -63,7 +63,7 @@ export default function AllLeaderboards({ onBack }) {
                 {/* Game title */}
                 <div className="flex items-center gap-2 mb-3">
                   <span
-                    className="font-pixel text-[10px] sm:text-xs whitespace-nowrap"
+                    className="font-pixel text-[10px] sm:text-xs md:text-sm whitespace-nowrap"
                     style={{ color: accent, textShadow: `0 0 8px ${accent}88` }}
                   >
                     {game.name}
@@ -81,12 +81,12 @@ export default function AllLeaderboards({ onBack }) {
                     {scores.map((entry, i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-3 bg-arcade-panel px-3 py-2 border"
+                        className="flex items-center gap-3 md:gap-5 bg-arcade-panel px-3 md:px-5 py-2 md:py-3 border"
                         style={{ borderColor: i < 3 ? RANK_COLOR[i] + '55' : '#3d3d5c' }}
                       >
                         {/* Rank */}
                         <span
-                          className="font-pixel text-[9px] w-5 text-center flex-shrink-0"
+                          className="font-pixel text-[9px] md:text-[11px] w-5 md:w-6 text-center flex-shrink-0"
                           style={{ color: RANK_COLOR[i] ?? '#6272a4' }}
                         >
                           {i < 3 ? ['★', '✦', '◆'][i] : `#${i + 1}`}
@@ -94,7 +94,7 @@ export default function AllLeaderboards({ onBack }) {
 
                         {/* Name */}
                         <span
-                          className="font-pixel text-[8px] sm:text-[9px] flex-1 truncate"
+                          className="font-pixel text-[8px] sm:text-[9px] md:text-[11px] flex-1 truncate"
                           style={{ color: RANK_COLOR[i] ?? '#f8f8f2' }}
                         >
                           {entry.player_name || 'Player'}
@@ -102,7 +102,7 @@ export default function AllLeaderboards({ onBack }) {
 
                         {/* Score */}
                         <span
-                          className="font-pixel text-[10px] sm:text-xs flex-shrink-0"
+                          className="font-pixel text-[10px] sm:text-xs md:text-sm flex-shrink-0"
                           style={{ color: RANK_COLOR[i] ?? '#f8f8f2' }}
                         >
                           {entry.score.toLocaleString()}
@@ -117,8 +117,8 @@ export default function AllLeaderboards({ onBack }) {
         )}
       </main>
 
-      <footer className="text-center py-4 border-t-2 border-arcade-gray/20">
-        <p className="font-pixel text-arcade-gray text-[9px]">
+      <footer className="text-center py-4 md:py-6 border-t-2 border-arcade-gray/20">
+        <p className="font-pixel text-arcade-gray text-[9px] md:text-[10px]">
           E-SUMMIT × APOGEE 2026 MINI ARCADE
         </p>
       </footer>
