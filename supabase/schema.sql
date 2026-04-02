@@ -60,3 +60,11 @@ CREATE VIEW public.leaderboard AS
 
 -- Grant read access to authenticated users (leaderboard is public within app)
 GRANT SELECT ON public.leaderboard TO authenticated;
+
+-- ============================================================
+--  REALTIME
+--  Enables Supabase Realtime on the scores table so the
+--  leaderboard updates instantly without polling.
+--  (Alternatively enable via: Dashboard → Database → Replication)
+-- ============================================================
+ALTER PUBLICATION supabase_realtime ADD TABLE public.scores;

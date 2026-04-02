@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { getLeaderboard } from '../services/supabase/scores'
+import { supabase } from '../services/supabase/client'
 
 const RANK_META = {
   1: { color: '#f1fa8c', glow: '#f1fa8c55', label: 'GOLD'   },
@@ -10,23 +11,35 @@ const RANK_META = {
 export default function Leaderboard({ currentGame }) {
   const [topScores, setTopScores] = useState([])
 
-  useEffect(() => {
-    async function fetchLeaderboard() {
-      if (!currentGame) return
-      try {
-        const data = await getLeaderboard(currentGame, 5)
-        setTopScores(data)
-      } catch (err) {
-        console.error('[Leaderboard] fetch error', err)
-      }
+  const fetchLeaderboard = useCallback(async () => {
+    if (!currentGame) return
+    try {
+      const data = await getLeaderboard(currentGame, 5)
+      setTopScores(data)
+    } catch (err) {
+      console.error('[Leaderboard] fetch error', err)
     }
-
-    fetchLeaderboard()
-    
-    // Poll every 5 seconds to keep it live
-    const intervalId = setInterval(fetchLeaderboard, 5000)
-    return () => clearInterval(intervalId)
   }, [currentGame])
+
+  useEffect(() => {
+    // Initial fetch
+    fetchLeaderboard()
+
+    // Realtime: re-fetch only when a new score is inserted for this game.
+    // Requires Realtime enabled on the scores table in Supabase:
+    //   Dashboard → Database → Replication → scores ✓
+    // or run: ALTER PUBLICATION supabase_realtime ADD TABLE public.scores;
+    const channel = supabase
+      .channel(`leaderboard-${currentGame}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'scores', filter: `game_name=eq.${currentGame}` },
+        () => fetchLeaderboard()
+      )
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+  }, [currentGame, fetchLeaderboard])
 
   return (
     <section className="mb-5 sm:mb-8">
