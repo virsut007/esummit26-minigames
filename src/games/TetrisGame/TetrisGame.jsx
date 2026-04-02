@@ -164,12 +164,9 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
         </div>
       </div>
 
-      {/* Canvas: width-driven so engine can compute cell size correctly */}
-      <div className="flex-1 flex items-start justify-center pt-2 overflow-hidden">
-        <div
-          className="relative border-2 border-arcade-purple shadow-[0_0_14px_#bd93f966] flex-shrink-0"
-          style={{ width: 'min(46vw, 210px)' }}
-        >
+      {/* Canvas fills available height — engine sizes from window dimensions */}
+      <div className="flex-1 flex justify-center overflow-hidden">
+        <div className="relative border-2 border-arcade-purple shadow-[0_0_14px_#bd93f966] flex-shrink-0">
           <canvas
             ref={canvasRef}
             onTouchStart={onTouchStart}
