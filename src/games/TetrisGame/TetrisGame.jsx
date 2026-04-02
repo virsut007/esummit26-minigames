@@ -51,41 +51,63 @@ export default function TetrisGame({ user, saveScore, scores, scoresLoading }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  // ── Touch swipe ──────────────────────────────────────────────────────────
+  // ── Touch: continuous drag ────────────────────────────────────────────────
   const touchRef = useRef(null)
+  const CELL_PX  = 25  // px of drag per 1-cell move
 
   const onTouchStart = useCallback((e) => {
     const t = e.touches[0]
-    touchRef.current = { x: t.clientX, y: t.clientY, time: Date.now() }
+    touchRef.current = { x: t.clientX, y: t.clientY, ox: t.clientX, oy: t.clientY, time: Date.now(), moved: false }
+  }, [])
+
+  const onTouchMove = useCallback((e) => {
+    if (!touchRef.current) return
+    const t   = e.touches[0]
+    const ref = touchRef.current
+    const eng = engineRef.current
+    if (!eng || !eng.running) return
+
+    const dx = t.clientX - ref.x
+    const dy = t.clientY - ref.y
+
+    // horizontal: move one cell per CELL_PX of drag
+    if (Math.abs(dx) >= CELL_PX) {
+      const steps = Math.floor(Math.abs(dx) / CELL_PX)
+      for (let i = 0; i < steps; i++) dx > 0 ? eng.moveRight() : eng.moveLeft()
+      ref.x += (dx > 0 ? 1 : -1) * steps * CELL_PX
+      ref.moved = true
+    }
+
+    // vertical down: soft drop per CELL_PX
+    if (dy >= CELL_PX) {
+      const steps = Math.floor(dy / CELL_PX)
+      for (let i = 0; i < steps; i++) eng.moveDown()
+      ref.y += steps * CELL_PX
+      ref.moved = true
+    }
   }, [])
 
   const onTouchEnd = useCallback((e) => {
     if (!touchRef.current) return
-    const t  = e.changedTouches[0]
-    const dx = t.clientX - touchRef.current.x
-    const dy = t.clientY - touchRef.current.y
-    const dt = Date.now() - touchRef.current.time
+    const ref = touchRef.current
+    const t   = e.changedTouches[0]
+    const dx  = t.clientX - ref.ox
+    const dy  = t.clientY - ref.oy
+    const dt  = Date.now() - ref.time
     touchRef.current = null
 
     const eng = engineRef.current
     if (!eng || !eng.running) return
 
-    // quick tap = rotate
-    if (Math.abs(dx) < 20 && Math.abs(dy) < 20 && dt < 250) {
+    // quick tap (no drag) = rotate
+    if (!ref.moved && Math.abs(dx) < 15 && Math.abs(dy) < 15 && dt < 250) {
       eng.rotate()
       return
     }
 
-    // swipe down fast = hard drop
-    if (dy > 60 && Math.abs(dx) < 40) {
+    // fast swipe down = hard drop
+    if (dy > 60 && Math.abs(dx) < 40 && dt < 300) {
       eng.hardDrop()
-      return
-    }
-
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 25) {
-      dx > 0 ? eng.moveRight() : eng.moveLeft()
-    } else if (dy > 25) {
-      eng.moveDown()
     }
   }, [])
 
@@ -123,6 +145,7 @@ export default function TetrisGame({ user, saveScore, scores, scoresLoading }) {
         <canvas
           ref={canvasRef}
           onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
           className="block w-full cursor-pointer select-none"
           style={{ touchAction: 'none', aspectRatio: '1 / 2' }}
