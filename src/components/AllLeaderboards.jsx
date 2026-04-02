@@ -47,14 +47,17 @@ export default function AllLeaderboards({ onBack }) {
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto px-4 md:px-8 lg:px-12 py-6 md:py-8 flex flex-col gap-6 md:gap-8">
+      <main className="flex-1 w-full max-w-lg lg:max-w-5xl mx-auto px-4 lg:px-10 py-6 lg:py-10">
 
         {loading ? (
           <p className="font-pixel text-arcade-green text-xs text-center animate-blink py-8">
             LOADING...
           </p>
         ) : (
-          GAMES.map(game => {
+          /* Mobile: flex column  |  Desktop: side-by-side columns per game */
+          <div className="flex flex-col gap-6 lg:grid lg:gap-8"
+               style={{ gridTemplateColumns: `repeat(${GAMES.length}, minmax(0,1fr))` }}>
+          {GAMES.map(game => {
             const scores  = boards[game.id] ?? []
             const accent  = GAME_COLOR[game.id] ?? '#50fa7b'
 
@@ -113,7 +116,8 @@ export default function AllLeaderboards({ onBack }) {
                 )}
               </section>
             )
-          })
+          })}
+          </div>
         )}
       </main>
 

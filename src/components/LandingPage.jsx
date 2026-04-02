@@ -60,76 +60,84 @@ export default function LandingPage({
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto px-4 md:px-8 lg:px-12 py-6 md:py-8 flex flex-col gap-7 md:gap-9">
+      <main className="flex-1 w-full max-w-lg lg:max-w-5xl xl:max-w-6xl mx-auto px-4 lg:px-10 py-6 lg:py-10">
 
-        {/* ── Hero ── */}
-        <section className="text-center">
-          <p className="font-pixel text-arcade-gray text-[9px] md:text-[10px] lg:text-xs tracking-widest mb-2">
-            PRESENTS
-          </p>
-          <h1 className="font-pixel text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight leading-tight">
-            <span className="text-arcade-green drop-shadow-[0_0_12px_#50fa7b]">MINI</span>
-            {' '}
-            <span className="text-arcade-yellow drop-shadow-[0_0_12px_#f1fa8c]">ARCADE</span>
-          </h1>
-          <p className="font-pixel text-arcade-gray text-[9px] md:text-[10px] mt-2 md:mt-3 animate-blink">
-            INSERT COIN TO PLAY
-          </p>
-        </section>
+        {/*
+          Mobile  → single flex column (original order)
+          Desktop → two-column grid: left = hero/skin/banners, right = game selection
+        */}
+        <div className="flex flex-col gap-7 lg:grid lg:gap-10 lg:items-start"
+             style={{ gridTemplateColumns: 'minmax(0,2fr) minmax(0,3fr)' }}>
 
-        {/* ── Character / Skin Selector ── */}
-        <section className="bg-arcade-panel border-2 border-arcade-cyan/40 px-4 md:px-6 py-3 md:py-4
-                            shadow-[0_0_12px_#8be9fd22]">
-          <p className="font-pixel text-arcade-cyan text-[9px] md:text-[10px] tracking-widest mb-3 text-center">
-            ── CHOOSE YOUR CHARACTER ──
-          </p>
-          <SkinSelector selectedId={selectedSkin} onSelect={onSkinChange} imgCache={imgCache} />
-        </section>
+          {/* ── Hero ── */}
+          <section className="text-center lg:col-start-1 lg:row-start-1">
+            <p className="font-pixel text-arcade-gray text-[9px] lg:text-[10px] tracking-widest mb-2">
+              PRESENTS
+            </p>
+            <h1 className="font-pixel text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight">
+              <span className="text-arcade-green drop-shadow-[0_0_12px_#50fa7b]">MINI</span>
+              {' '}
+              <span className="text-arcade-yellow drop-shadow-[0_0_12px_#f1fa8c]">ARCADE</span>
+            </h1>
+            <p className="font-pixel text-arcade-gray text-[9px] lg:text-[10px] mt-2 lg:mt-3 animate-blink">
+              INSERT COIN TO PLAY
+            </p>
+          </section>
 
-        {/* ── Game Selection ── */}
-        <section>
-          {/* Prominent leaderboard button */}
-          <button
-            onClick={onLeaderboard}
-            className="w-full font-pixel text-xs md:text-sm text-arcade-bg bg-arcade-yellow border-2 border-arcade-yellow
-                       py-3 md:py-4 mb-4 hover:bg-arcade-green hover:border-arcade-green transition-all
-                       shadow-[0_0_14px_#f1fa8c55] flex items-center justify-center gap-2"
-          >
-            🏆 HALL OF FAME
-          </button>
+          {/* ── Character / Skin Selector ── */}
+          <section className="bg-arcade-panel border-2 border-arcade-cyan/40 px-4 lg:px-5 py-3 lg:py-4
+                              shadow-[0_0_12px_#8be9fd22] lg:col-start-1 lg:row-start-2">
+            <p className="font-pixel text-arcade-cyan text-[9px] lg:text-[10px] tracking-widest mb-3 text-center">
+              ── CHOOSE YOUR CHARACTER ──
+            </p>
+            <SkinSelector selectedId={selectedSkin} onSelect={onSkinChange} imgCache={imgCache} />
+          </section>
 
-          <h2 className="font-pixel text-arcade-gray text-[9px] md:text-[10px] tracking-widest text-center mb-4">
-            ── SELECT YOUR GAME ──
-          </h2>
-          <div className="grid grid-cols-3 gap-2 md:gap-4 lg:gap-5">
-            {GAMES.map(game => (
-              <GameCard key={game.id} game={game} onSelect={onSelectGame} />
-            ))}
-          </div>
-        </section>
+          {/* ── Game Selection — right column on desktop, spans both hero+skin rows ── */}
+          <section className="lg:col-start-2 lg:row-start-1 lg:row-span-2">
+            <button
+              onClick={onLeaderboard}
+              className="w-full font-pixel text-xs lg:text-sm text-arcade-bg bg-arcade-yellow border-2 border-arcade-yellow
+                         py-3 lg:py-4 mb-4 hover:bg-arcade-green hover:border-arcade-green transition-all
+                         shadow-[0_0_14px_#f1fa8c55] flex items-center justify-center gap-2"
+            >
+              🏆 HALL OF FAME
+            </button>
 
-        {/* ── Event Ad Banners ── */}
-        <section>
-          <h2 className="font-pixel text-arcade-gray text-[9px] md:text-[10px] text-center mb-3 tracking-widest">
-            ── EVENTS ──
-          </h2>
-          <div className="flex flex-col gap-3">
-            <AdBanner
-              src={AD_SUMMIT_SRC}
-              label="E-SUMMIT 2026"
-              accentColor="#50fa7b"
-              borderClass="border-arcade-green"
-              glowClass="shadow-[0_0_12px_#50fa7b33]"
-            />
-            <AdBanner
-              src={AD_APOGEE_SRC}
-              label="APOGEE 2026"
-              accentColor="#bd93f9"
-              borderClass="border-arcade-purple"
-              glowClass="shadow-[0_0_12px_#bd93f933]"
-            />
-          </div>
-        </section>
+            <h2 className="font-pixel text-arcade-gray text-[9px] lg:text-[10px] tracking-widest text-center mb-4">
+              ── SELECT YOUR GAME ──
+            </h2>
+            <div className="grid grid-cols-3 gap-2 lg:gap-4">
+              {GAMES.map(game => (
+                <GameCard key={game.id} game={game} onSelect={onSelectGame} />
+              ))}
+            </div>
+          </section>
+
+          {/* ── Event Ad Banners ── */}
+          <section className="lg:col-start-1 lg:row-start-3">
+            <h2 className="font-pixel text-arcade-gray text-[9px] lg:text-[10px] text-center mb-3 tracking-widest">
+              ── EVENTS ──
+            </h2>
+            <div className="flex flex-col gap-3">
+              <AdBanner
+                src={AD_SUMMIT_SRC}
+                label="E-SUMMIT 2026"
+                accentColor="#50fa7b"
+                borderClass="border-arcade-green"
+                glowClass="shadow-[0_0_12px_#50fa7b33]"
+              />
+              <AdBanner
+                src={AD_APOGEE_SRC}
+                label="APOGEE 2026"
+                accentColor="#bd93f9"
+                borderClass="border-arcade-purple"
+                glowClass="shadow-[0_0_12px_#bd93f933]"
+              />
+            </div>
+          </section>
+
+        </div>
 
       </main>
 
@@ -181,7 +189,7 @@ function GameCard({ game, onSelect }) {
     <button
       onClick={() => ready && onSelect(game.id)}
       disabled={!ready}
-      className={`relative flex flex-col items-center gap-3 md:gap-4 p-4 md:p-5 lg:p-6 border-2 transition-all text-left w-full
+      className={`relative flex flex-col items-center gap-3 lg:gap-5 p-4 lg:p-6 border-2 transition-all text-left w-full
         ${ready
           ? 'border-arcade-green hover:bg-arcade-panel hover:shadow-[0_0_20px_#50fa7b44] cursor-pointer group'
           : 'border-arcade-gray/30 cursor-not-allowed opacity-50'
@@ -197,9 +205,9 @@ function GameCard({ game, onSelect }) {
       )}
 
       {/* Icon area */}
-      <div className="w-full h-14 md:h-20 lg:h-28 flex items-center justify-center bg-arcade-dark border border-arcade-gray/20
+      <div className="w-full h-14 lg:h-32 flex items-center justify-center bg-arcade-dark border border-arcade-gray/20
                       group-hover:border-arcade-green/50 transition-colors">
-        <span className={`font-pixel text-xl md:text-2xl lg:text-3xl ${ready ? 'text-arcade-green' : 'text-arcade-gray'}`}>
+        <span className={`font-pixel text-xl lg:text-4xl ${ready ? 'text-arcade-green' : 'text-arcade-gray'}`}>
           {game.name.split(' ').map(w => w[0]).join('')}
         </span>
       </div>
