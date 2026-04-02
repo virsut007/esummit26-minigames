@@ -57,9 +57,27 @@ export class DinoEngine {
     this.skin    = null
     this.skinImg = null
 
+    this.charImgs = { run1: null, run2: null, jump: null }
+    this._loadCharImages()
+
     this._raf    = null
     this._lastTs = null
     this._loop   = this._loop.bind(this)
+  }
+
+  // ─── Character image loader ────────────────────────────────────────────────
+
+  _loadCharImages() {
+    const entries = [
+      ['run1', '/char-run1.png'],
+      ['run2', '/char-run2.png'],
+      ['jump', '/char-jump.png'],
+    ]
+    for (const [key, src] of entries) {
+      const img = new Image()
+      img.onload = () => { this.charImgs[key] = img }
+      img.src = src
+    }
   }
 
   // ─── Public API ────────────────────────────────────────────────────────────
@@ -286,8 +304,24 @@ export class DinoEngine {
   _drawDino(d, color) {
     const ctx = this.ctx
     const { x, y, onGround, legFrame } = d
-    const S = DS
 
+    // ── Custom character images ───────────────────────────────────────────────
+    const charImg = onGround
+      ? (legFrame === 0 ? this.charImgs.run1 : this.charImgs.run2)
+      : this.charImgs.jump
+
+    if (charImg) {
+      // Draw slightly larger than the collision box, feet anchored to the ground
+      const drawW = Math.round(DINO_W * 1.6)
+      const drawH = Math.round(DINO_H * 1.6)
+      const drawX = x - Math.round((drawW - DINO_W) / 2)
+      const drawY = y - (drawH - DINO_H)
+      ctx.drawImage(charImg, drawX, drawY, drawW, drawH)
+      return
+    }
+
+    // ── Fallback: original pixel-art dino (while images load) ────────────────
+    const S = DS
     ctx.save()
     ctx.translate(x, y)
     ctx.fillStyle = color

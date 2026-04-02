@@ -60,27 +60,27 @@ export default function LandingPage({
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-lg mx-auto px-4 py-6 flex flex-col gap-7">
+      <main className="flex-1 w-full max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto px-4 md:px-8 lg:px-12 py-6 md:py-8 flex flex-col gap-7 md:gap-9">
 
         {/* ── Hero ── */}
         <section className="text-center">
-          <p className="font-pixel text-arcade-gray text-[9px] tracking-widest mb-2">
+          <p className="font-pixel text-arcade-gray text-[9px] md:text-[10px] lg:text-xs tracking-widest mb-2">
             PRESENTS
           </p>
-          <h1 className="font-pixel text-3xl sm:text-4xl tracking-tight leading-tight">
+          <h1 className="font-pixel text-3xl sm:text-4xl lg:text-5xl xl:text-6xl tracking-tight leading-tight">
             <span className="text-arcade-green drop-shadow-[0_0_12px_#50fa7b]">MINI</span>
             {' '}
             <span className="text-arcade-yellow drop-shadow-[0_0_12px_#f1fa8c]">ARCADE</span>
           </h1>
-          <p className="font-pixel text-arcade-gray text-[9px] mt-2 animate-blink">
+          <p className="font-pixel text-arcade-gray text-[9px] md:text-[10px] mt-2 md:mt-3 animate-blink">
             INSERT COIN TO PLAY
           </p>
         </section>
 
         {/* ── Character / Skin Selector ── */}
-        <section className="bg-arcade-panel border-2 border-arcade-cyan/40 px-4 py-3
+        <section className="bg-arcade-panel border-2 border-arcade-cyan/40 px-4 md:px-6 py-3 md:py-4
                             shadow-[0_0_12px_#8be9fd22]">
-          <p className="font-pixel text-arcade-cyan text-[9px] tracking-widest mb-3 text-center">
+          <p className="font-pixel text-arcade-cyan text-[9px] md:text-[10px] tracking-widest mb-3 text-center">
             ── CHOOSE YOUR CHARACTER ──
           </p>
           <SkinSelector selectedId={selectedSkin} onSelect={onSkinChange} imgCache={imgCache} />
@@ -91,17 +91,17 @@ export default function LandingPage({
           {/* Prominent leaderboard button */}
           <button
             onClick={onLeaderboard}
-            className="w-full font-pixel text-xs text-arcade-bg bg-arcade-yellow border-2 border-arcade-yellow
-                       py-3 mb-4 hover:bg-arcade-green hover:border-arcade-green transition-all
+            className="w-full font-pixel text-xs md:text-sm text-arcade-bg bg-arcade-yellow border-2 border-arcade-yellow
+                       py-3 md:py-4 mb-4 hover:bg-arcade-green hover:border-arcade-green transition-all
                        shadow-[0_0_14px_#f1fa8c55] flex items-center justify-center gap-2"
           >
             🏆 HALL OF FAME
           </button>
 
-          <h2 className="font-pixel text-arcade-gray text-[9px] tracking-widest text-center mb-4">
+          <h2 className="font-pixel text-arcade-gray text-[9px] md:text-[10px] tracking-widest text-center mb-4">
             ── SELECT YOUR GAME ──
           </h2>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2 md:gap-4 lg:gap-5">
             {GAMES.map(game => (
               <GameCard key={game.id} game={game} onSelect={onSelectGame} />
             ))}
@@ -110,7 +110,7 @@ export default function LandingPage({
 
         {/* ── Event Ad Banners ── */}
         <section>
-          <h2 className="font-pixel text-arcade-gray text-[9px] text-center mb-3 tracking-widest">
+          <h2 className="font-pixel text-arcade-gray text-[9px] md:text-[10px] text-center mb-3 tracking-widest">
             ── EVENTS ──
           </h2>
           <div className="flex flex-col gap-3">
@@ -133,8 +133,8 @@ export default function LandingPage({
 
       </main>
 
-      <footer className="text-center py-4 border-t-2 border-arcade-gray/20">
-        <p className="font-pixel text-arcade-gray text-[9px]">
+      <footer className="text-center py-4 md:py-6 border-t-2 border-arcade-gray/20">
+        <p className="font-pixel text-arcade-gray text-[9px] md:text-[10px]">
           E-SUMMIT × APOGEE 2026 MINI ARCADE
         </p>
       </footer>
@@ -181,7 +181,7 @@ function GameCard({ game, onSelect }) {
     <button
       onClick={() => ready && onSelect(game.id)}
       disabled={!ready}
-      className={`relative flex flex-col items-center gap-3 p-4 border-2 transition-all text-left w-full
+      className={`relative flex flex-col items-center gap-3 md:gap-4 p-4 md:p-5 lg:p-6 border-2 transition-all text-left w-full
         ${ready
           ? 'border-arcade-green hover:bg-arcade-panel hover:shadow-[0_0_20px_#50fa7b44] cursor-pointer group'
           : 'border-arcade-gray/30 cursor-not-allowed opacity-50'
@@ -197,26 +197,26 @@ function GameCard({ game, onSelect }) {
       )}
 
       {/* Icon area */}
-      <div className="w-full h-14 flex items-center justify-center bg-arcade-dark border border-arcade-gray/20
+      <div className="w-full h-14 md:h-20 lg:h-28 flex items-center justify-center bg-arcade-dark border border-arcade-gray/20
                       group-hover:border-arcade-green/50 transition-colors">
-        <span className={`font-pixel text-xl ${ready ? 'text-arcade-green' : 'text-arcade-gray'}`}>
+        <span className={`font-pixel text-xl md:text-2xl lg:text-3xl ${ready ? 'text-arcade-green' : 'text-arcade-gray'}`}>
           {game.name.split(' ').map(w => w[0]).join('')}
         </span>
       </div>
 
       {/* Game name + description */}
       <div className="w-full">
-        <p className={`font-pixel text-[9px] sm:text-[10px] ${ready ? 'text-arcade-green' : 'text-arcade-gray'}`}>
+        <p className={`font-pixel text-[9px] sm:text-[10px] lg:text-xs ${ready ? 'text-arcade-green' : 'text-arcade-gray'}`}>
           {game.name}
         </p>
-        <p className="font-mono text-arcade-gray text-[8px] mt-0.5 leading-tight">
+        <p className="font-mono text-arcade-gray text-[8px] lg:text-[9px] mt-0.5 leading-tight">
           {game.description}
         </p>
       </div>
 
       {ready && (
-        <div className="w-full font-pixel text-[8px] text-arcade-bg bg-arcade-green
-                        px-2 py-1.5 text-center group-hover:bg-arcade-yellow transition-colors">
+        <div className="w-full font-pixel text-[8px] lg:text-[9px] text-arcade-bg bg-arcade-green
+                        px-2 py-1.5 lg:py-2 text-center group-hover:bg-arcade-yellow transition-colors">
           ▶ PLAY
         </div>
       )}
