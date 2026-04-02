@@ -20,12 +20,6 @@ export const GAMES = [
     available:   true,
   },
   {
-    id:          'snake',
-    name:        'SNAKE',
-    description: 'Eat, grow, survive!',
-    available:   true,
-  },
-  {
     id:          'tetris',
     name:        'TETRIS',
     description: 'Stack \u0026 clear lines!',

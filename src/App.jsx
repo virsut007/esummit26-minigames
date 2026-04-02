@@ -8,7 +8,6 @@ import Header         from './components/Header'
 import AllLeaderboards from './components/AllLeaderboards'
 import DinosaurGame   from './games/DinosaurGame/DinosaurGame'
 import FlappyGame     from './games/FlappyGame/FlappyGame'
-import SnakeGame      from './games/SnakeGame/SnakeGame'
 import TetrisGame     from './games/TetrisGame/TetrisGame'
 import { SKINS }      from './games/skins'
 
@@ -24,7 +23,6 @@ function renderGame(currentGame, props) {
   switch (currentGame) {
     case 'dinosaur': return <DinosaurGame {...props} currentGame="dinosaur" />
     case 'flappy':   return <FlappyGame   {...props} currentGame="flappy"   />
-    case 'snake':    return <SnakeGame    {...props} currentGame="snake"    />
     case 'tetris':   return <TetrisGame   {...props} currentGame="tetris"   />
     default: return null
   }
