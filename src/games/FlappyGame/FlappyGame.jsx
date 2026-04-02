@@ -72,6 +72,8 @@ export default function FlappyGame({ user, saveScore, scores, scoresLoading }) {
 
   const handleTap = useCallback((e) => {
     e.preventDefault()
+    // Ignore extra touch points (multi-finger)
+    if (e.touches && e.touches.length > 1) return
     engineRef.current?.flap()
   }, [])
 
@@ -99,11 +101,10 @@ export default function FlappyGame({ user, saveScore, scores, scoresLoading }) {
         {/* Canvas */}
         <div className="relative border-2 sm:border-4 border-arcade-green shadow-[0_0_16px_#50fa7b44]
                         w-full mx-auto"
-             style={{ maxWidth: 400 }}>
+             style={{ maxWidth: 400, touchAction: 'none' }}>
           <canvas
             ref={canvasRef}
-            onClick={handleTap}
-            onTouchStart={handleTap}
+            onPointerDown={handleTap}
             className="block w-full cursor-pointer select-none"
             style={{ touchAction: 'none', aspectRatio: `${GAME_W} / ${GAME_H}` }}
           />
@@ -111,7 +112,7 @@ export default function FlappyGame({ user, saveScore, scores, scoresLoading }) {
         </div>
 
         <p className="font-pixel text-arcade-gray text-[9px] sm:text-xs text-center">
-          SPACE / UP ARROW / TAP to flap
+          TAP / SPACE / UP ARROW to flap
         </p>
       </div>
 

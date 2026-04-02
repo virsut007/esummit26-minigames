@@ -52,6 +52,7 @@ export class FlappyEngine {
 
     this._raf    = null
     this._lastTs = null
+    this._bgGrad = null
     this._loop   = this._loop.bind(this)
   }
 
@@ -65,6 +66,11 @@ export class FlappyEngine {
   init() {
     this.canvas.width  = GAME_W
     this.canvas.height = GAME_H
+    // Cache background gradient (canvas dimensions never change)
+    this._bgGrad = this.ctx.createLinearGradient(0, 0, 0, GAME_H)
+    this._bgGrad.addColorStop(0,   '#0f0f23')
+    this._bgGrad.addColorStop(0.7, '#1a1a3e')
+    this._bgGrad.addColorStop(1,   '#0f0f23')
     this._seedClouds()
     this._renderIdle(0)
     this._idleBob()
@@ -285,12 +291,7 @@ export class FlappyEngine {
 
   _drawBg() {
     const ctx = this.ctx
-    // Sky gradient
-    const grad = ctx.createLinearGradient(0, 0, 0, GAME_H)
-    grad.addColorStop(0,   '#0f0f23')
-    grad.addColorStop(0.7, '#1a1a3e')
-    grad.addColorStop(1,   '#0f0f23')
-    ctx.fillStyle = grad
+    ctx.fillStyle = this._bgGrad
     ctx.fillRect(0, 0, GAME_W, GAME_H)
 
     // Stars
