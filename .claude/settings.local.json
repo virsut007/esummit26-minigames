@@ -6,7 +6,8 @@
       "Bash(npm run:*)",
       "Bash(git add:*)",
       "Bash(git commit -m ':*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(node -e \"require\\('./node_modules/html2canvas/dist/html2canvas.min.js'\\); console.log\\('ok'\\)\")"
     ]
   }
 }

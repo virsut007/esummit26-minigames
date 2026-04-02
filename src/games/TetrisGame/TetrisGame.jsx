@@ -149,7 +149,7 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
             style={{ touchAction: 'none', display: 'block' }}
           />
           {gameOver && (
-            <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} />
+            <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} user={user} />
           )}
         </div>
       </div>

@@ -73,7 +73,7 @@ export default function FlappyGame({
         style={{ touchAction: 'none' }}
       />
       {gameOver && (
-        <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} />
+        <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} user={user} />
       )}
     </div>
   )
