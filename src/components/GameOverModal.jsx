@@ -1,25 +1,116 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getLeaderboard } from '../services/supabase/scores'
+import ScoreShareCard from './ScoreShareCard'
+import { generateShareImage } from '../utils/generateShareImage'
 
 // ── Banner / Hoarding Configuration ───────────────────────────────────────────
-// Drop your poster images into /public/ads/ and set the path below.
-// Shown full-width at the top of the game-over screen like a road hoarding.
-// Set to null to show the placeholder until you have an image ready.
 const BANNER_SRC = null   // e.g. '/ads/esummit-hoarding.jpg'
 // ─────────────────────────────────────────────────────────────────────────────
 
 const RANK_COLOR = ['#f1fa8c', '#8be9fd', '#ffb86c']
 
-export default function GameOverModal({ score, onPlayAgain, currentGame }) {
-  const [leaders, setLeaders] = useState([])
+// Human-readable game names used in the share text
+const GAME_LABEL = {
+  dinosaur: 'Dino Run 🦖',
+  flappy:   'Flappy Bird 🐦',
+  snake:    'Snake 🐍',
+  tetris:   'Tetris 🎮',
+}
+
+export default function GameOverModal({ score, onPlayAgain, currentGame, user = null }) {
+  const [leaders,    setLeaders]    = useState([])
+  const [sharing,    setSharing]    = useState(false) // loading state while generating image
+  const [shareError, setShareError] = useState('')    // brief error message
+
+  // Ref to the hidden ScoreShareCard — passed to generateShareImage()
+  const cardRef = useRef(null)
 
   useEffect(() => {
     if (!currentGame) return
     getLeaderboard(currentGame, 5).then(setLeaders).catch(() => {})
   }, [currentGame])
 
+  // ── Share handler ─────────────────────────────────────────────────────────
+  const handleShare = async () => {
+    setSharing(true)
+    setShareError('')
+
+    try {
+      const blob = await generateShareImage(cardRef)
+      const file = new File([blob], 'my-score.png', { type: 'image/png' })
+
+      const gameLabel = GAME_LABEL[currentGame] ?? 'the Mini Arcade'
+      const shareText = `I just scored ${score.toLocaleString()} in ${gameLabel}! Can you beat me? 🎮`
+
+      // ── Mobile: native share sheet (best path — opens Instagram Stories etc.) ──
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title:  `Score: ${score.toLocaleString()} in ${gameLabel}`,
+          text:   shareText,
+          url:    window.location.href,
+        })
+        return
+      }
+
+      // ── Mobile: share URL only (no file support) ──
+      if (navigator.share) {
+        await navigator.share({
+          title: `Score: ${score.toLocaleString()} in ${gameLabel}`,
+          text:  shareText,
+          url:   window.location.href,
+        })
+        return
+      }
+
+      // ── Desktop / unsupported: download the PNG ──
+      const url = URL.createObjectURL(blob)
+      const a   = Object.assign(document.createElement('a'), {
+        href:     url,
+        download: `score-${currentGame}-${score}.png`,
+      })
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+
+    } catch (err) {
+      // AbortError = user cancelled the share sheet — not a real error
+      if (err?.name !== 'AbortError') {
+        console.error('[ShareScore]', err)
+        setShareError('SHARE FAILED — try again')
+      }
+    } finally {
+      setSharing(false)
+    }
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const username = user?.user_metadata?.full_name ?? null
+
   return (
     <div className="fixed inset-0 z-[200] bg-black flex flex-col overflow-y-auto">
+
+      {/* ── Hidden ScoreShareCard (off-screen capture target) ── */}
+      {/* Rendered outside the visible viewport; html2canvas reads it from the DOM. */}
+      <div
+        style={{
+          position: 'fixed',
+          top: '-9999px',
+          left: '-9999px',
+          width: '450px',
+          height: '800px',
+          pointerEvents: 'none',
+          zIndex: -1,
+        }}
+      >
+        <ScoreShareCard
+          ref={cardRef}
+          score={score}
+          gameName={currentGame}
+          username={username}
+        />
+      </div>
 
       {/* ── Banner / Hoarding ── */}
       <div className="w-full flex-shrink-0 border-b-2 border-arcade-gray/30"
@@ -61,6 +152,28 @@ export default function GameOverModal({ score, onPlayAgain, currentGame }) {
           <p className="font-pixel text-arcade-gray text-[9px] mb-1">YOUR SCORE</p>
           <p className="font-pixel text-arcade-yellow text-4xl leading-none">{score}</p>
         </div>
+
+        {/* ── SHARE button ── */}
+        <button
+          onClick={handleShare}
+          disabled={sharing}
+          className="w-full max-w-xs font-pixel text-[10px] text-arcade-bg
+                     border-4 shadow-pixel py-3
+                     transition-all active:translate-y-1 active:shadow-none
+                     disabled:opacity-60 disabled:cursor-not-allowed"
+          style={{
+            background:   sharing ? '#6272a4' : '#bd93f9',
+            borderColor:  sharing ? '#6272a4' : '#bd93f9',
+            color: '#0f0f23',
+          }}
+        >
+          {sharing ? '⏳ GENERATING...' : '📤 SHARE YOUR SCORE'}
+        </button>
+
+        {/* Share error message */}
+        {shareError && (
+          <p className="font-pixel text-arcade-red text-[8px] text-center">{shareError}</p>
+        )}
 
         {/* Leaderboard */}
         {leaders.length > 0 && (
@@ -107,6 +220,7 @@ export default function GameOverModal({ score, onPlayAgain, currentGame }) {
         >
           ▶ PLAY AGAIN
         </button>
+
       </div>
     </div>
   )

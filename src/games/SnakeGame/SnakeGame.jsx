@@ -86,7 +86,7 @@ export default function SnakeGame({ user, saveScore, currentGame }) {
           style={{ touchAction: 'none', aspectRatio: '1 / 1' }}
         />
         {gameOver && (
-          <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} />
+          <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} user={user} />
         )}
       </div>
 
