@@ -42,32 +42,21 @@ export default function LandingPage({
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* Leaderboard button */}
-            <button
-              onClick={onLeaderboard}
-              className="font-pixel text-[9px] text-arcade-yellow border-2 border-arcade-yellow
-                         px-2 py-1.5 hover:bg-arcade-yellow hover:text-arcade-bg transition-all"
-            >
-              🏆 SCORES
-            </button>
-
-            {user.id !== 'guest' && (
-              <>
-                <span className="hidden sm:block font-mono text-arcade-gray text-xs truncate max-w-[140px]"
-                      title={user.email}>
-                  {user.email}
-                </span>
-                <button
-                  onClick={onSignOut}
-                  className="font-pixel text-[9px] text-arcade-red border-2 border-arcade-red
-                             px-2 py-1.5 hover:bg-arcade-red hover:text-arcade-bg transition-all"
-                >
-                  OUT
-                </button>
-              </>
-            )}
-          </div>
+          {user.id !== 'guest' && (
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:block font-mono text-arcade-gray text-xs truncate max-w-[140px]"
+                    title={user.email}>
+                {user.email}
+              </span>
+              <button
+                onClick={onSignOut}
+                className="font-pixel text-[9px] text-arcade-red border-2 border-arcade-red
+                           px-2 py-1.5 hover:bg-arcade-red hover:text-arcade-bg transition-all"
+              >
+                OUT
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
@@ -99,9 +88,19 @@ export default function LandingPage({
 
         {/* ── Game Selection ── */}
         <section>
-          <h2 className="font-pixel text-arcade-gray text-[9px] text-center mb-4 tracking-widest">
-            ── SELECT YOUR GAME ──
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-pixel text-arcade-gray text-[9px] tracking-widest">
+              ── SELECT YOUR GAME ──
+            </h2>
+            <button
+              onClick={onLeaderboard}
+              className="font-pixel text-[9px] text-arcade-yellow border-2 border-arcade-yellow
+                         px-2 py-1 hover:bg-arcade-yellow hover:text-arcade-bg transition-all
+                         flex items-center gap-1"
+            >
+              🏆 SCORES
+            </button>
+          </div>
           <div className="grid grid-cols-2 gap-3">
             {GAMES.map(game => (
               <GameCard key={game.id} game={game} onSelect={onSelectGame} />

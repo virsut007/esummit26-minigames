@@ -115,28 +115,29 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
   }, [])
 
   return (
-    <div className="flex flex-col gap-3 items-center">
+    <div className="flex-1 flex flex-col items-center overflow-hidden px-3 py-1">
+
       {/* Title bar */}
-      <div className="flex items-center justify-between w-full flex-wrap gap-2">
-        <h2 className="font-pixel text-arcade-purple text-xs drop-shadow-[0_0_6px_#bd93f9]">
+      <div className="flex items-center justify-between w-full mb-1.5 flex-shrink-0 flex-wrap gap-1">
+        <h2 className="font-pixel text-arcade-purple text-[10px] drop-shadow-[0_0_6px_#bd93f9]">
           TETRIS
         </h2>
         <div className="flex gap-3">
           <span className="font-pixel text-arcade-yellow text-[9px]">
-            SCORE <span className="text-xs">{liveScore}</span>
+            SCORE <span className="text-[10px]">{liveScore}</span>
           </span>
           <span className="font-pixel text-arcade-cyan text-[9px]">
-            LINES <span className="text-xs">{lines}</span>
+            LINES <span className="text-[10px]">{lines}</span>
           </span>
           <span className="font-pixel text-arcade-green text-[9px]">
-            LVL <span className="text-xs">{level}</span>
+            LVL <span className="text-[10px]">{level}</span>
           </span>
         </div>
       </div>
 
-      {/* Canvas — 1:2 aspect ratio, centred */}
-      <div className="relative border-2 border-arcade-purple shadow-[0_0_16px_#bd93f944]
-                      w-full max-w-[200px]">
+      {/* Canvas — 1:2 aspect ratio */}
+      <div className="relative border-2 border-arcade-purple shadow-[0_0_14px_#bd93f944]
+                      flex-shrink-0" style={{ width: 'min(48vw, 220px)' }}>
         <canvas
           ref={canvasRef}
           onTouchStart={onTouchStart}
@@ -146,15 +147,11 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
           style={{ touchAction: 'none', aspectRatio: '1 / 2' }}
         />
         {gameOver && (
-          <GameOverModal
-            score={finalScore}
-            onPlayAgain={handlePlayAgain}
-            currentGame={currentGame}
-          />
+          <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} />
         )}
       </div>
 
-      <p className="font-pixel text-arcade-gray text-[8px] text-center">
+      <p className="font-pixel text-arcade-gray text-[8px] text-center mt-2 flex-shrink-0">
         TAP rotate · SWIPE to move · SWIPE ↓ hard drop
       </p>
     </div>
