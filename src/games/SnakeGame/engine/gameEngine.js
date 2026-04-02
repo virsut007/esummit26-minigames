@@ -7,7 +7,7 @@
 
 const GRID      = 20          // cells per row/column
 const START_LEN = 3
-const BASE_MS   = 150         // starting tick interval
+const BASE_MS   = 220         // starting tick interval
 const MIN_MS    = 60          // fastest tick interval
 const SPEED_INC = 3           // ms faster per food eaten
 

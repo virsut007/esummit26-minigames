@@ -154,9 +154,6 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
         </div>
       </div>
 
-      <p className="font-pixel text-arcade-gray text-[8px] text-center py-1 flex-shrink-0">
-        TAP rotate · SWIPE to move · SWIPE ↓ hard drop
-      </p>
     </div>
   )
 }

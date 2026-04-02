@@ -15,7 +15,6 @@ export default function SnakeGame({ user, saveScore, currentGame }) {
   const [gameOver,   setGameOver]   = useState(false)
   const [finalScore, setFinalScore] = useState(0)
 
-  // ── Init engine ──────────────────────────────────────────────────────────
   useEffect(() => {
     if (!canvasRef.current) return
     const engine = new SnakeEngine(canvasRef.current, {
@@ -27,21 +26,19 @@ export default function SnakeGame({ user, saveScore, currentGame }) {
     return () => engine.destroy()
   }, [])
 
-  // ── Keyboard ─────────────────────────────────────────────────────────────
   useEffect(() => {
     const onKey = (e) => {
       const map = {
-        ArrowUp: [0,-1], ArrowDown: [0,1], ArrowLeft: [-1,0], ArrowRight: [1,0],
-        KeyW: [0,-1], KeyS: [0,1], KeyA: [-1,0], KeyD: [1,0],
+        ArrowUp:[0,-1], ArrowDown:[0,1], ArrowLeft:[-1,0], ArrowRight:[1,0],
+        KeyW:[0,-1], KeyS:[0,1], KeyA:[-1,0], KeyD:[1,0],
       }
-      const dir = map[e.code]
-      if (dir) { e.preventDefault(); engineRef.current?.setDirection(dir[0], dir[1]) }
+      const d = map[e.code]
+      if (d) { e.preventDefault(); engineRef.current?.setDirection(d[0], d[1]) }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  // ── Swipe on canvas ───────────────────────────────────────────────────────
   const onTouchStart = useCallback((e) => {
     const t = e.touches[0]
     touchStart.current = { x: t.clientX, y: t.clientY }
@@ -58,30 +55,29 @@ export default function SnakeGame({ user, saveScore, currentGame }) {
     else                              engineRef.current?.setDirection(0, dy > 0 ? 1 : -1)
   }, [])
 
-  // ── D-pad ─────────────────────────────────────────────────────────────────
-  const dir = useCallback((dx, dy) => (e) => {
-    e.preventDefault()
-    engineRef.current?.setDirection(dx, dy)
+  const dpad = useCallback((dx, dy) => (e) => {
+    e.preventDefault(); engineRef.current?.setDirection(dx, dy)
   }, [])
 
   const handlePlayAgain = useCallback(() => {
-    setGameOver(false)
-    setLiveScore(0)
-    engineRef.current?.startGame()
+    setGameOver(false); setLiveScore(0); engineRef.current?.startGame()
   }, [])
 
   return (
-    <div className="flex-1 flex flex-col items-center px-4 py-1">
+    <div className="flex-1 flex flex-col items-center py-2">
 
       {/* Score bar */}
-      <div className="flex items-center justify-between w-full mb-1.5 flex-shrink-0">
+      <div className="flex items-center justify-between mb-2 flex-shrink-0"
+           style={{ width: 'calc(100vw - 56px)' }}>
         <span className="font-pixel text-arcade-green text-[10px] drop-shadow-[0_0_6px_#50fa7b]">SNAKE</span>
         <span className="font-pixel text-arcade-yellow text-[10px]">{liveScore}</span>
       </div>
 
-      {/* Canvas — square, padded enough so border+shadow render fully */}
-      <div className="relative border-2 border-arcade-green shadow-[0_0_10px_#50fa7b66]
-                      w-full flex-shrink-0" style={{ maxWidth: 360 }}>
+      {/* Canvas — 28px margin each side guarantees all borders visible */}
+      <div
+        className="relative border-2 border-arcade-green shadow-[0_0_10px_#50fa7b88] flex-shrink-0"
+        style={{ width: 'calc(100vw - 56px)', maxWidth: 320 }}
+      >
         <canvas
           ref={canvasRef}
           onTouchStart={onTouchStart}
@@ -95,17 +91,13 @@ export default function SnakeGame({ user, saveScore, currentGame }) {
       </div>
 
       {/* D-pad */}
-      <div className="grid grid-cols-3 gap-1.5 mt-3 flex-shrink-0" style={{ width: 144 }}>
-        <div /><DpadBtn label="▲" onPress={dir(0,-1)} /><div />
-        <DpadBtn label="◀" onPress={dir(-1,0)} />
-        <div className="border-2 border-arcade-gray/20 aspect-square" />
-        <DpadBtn label="▶" onPress={dir(1,0)} />
-        <div /><DpadBtn label="▼" onPress={dir(0,1)} /><div />
+      <div className="grid grid-cols-3 gap-2 mt-4 flex-shrink-0" style={{ width: 150 }}>
+        <div /><DpadBtn label="▲" onPress={dpad(0,-1)} /><div />
+        <DpadBtn label="◀" onPress={dpad(-1,0)} />
+        <div className="border-2 border-arcade-gray/20 aspect-square rounded-sm" />
+        <DpadBtn label="▶" onPress={dpad(1,0)} />
+        <div /><DpadBtn label="▼" onPress={dpad(0,1)} /><div />
       </div>
-
-      <p className="font-pixel text-arcade-gray text-[8px] mt-2 flex-shrink-0">
-        SWIPE or D-PAD to move
-      </p>
     </div>
   )
 }
@@ -115,7 +107,7 @@ function DpadBtn({ label, onPress }) {
     <button
       onTouchStart={onPress}
       onClick={onPress}
-      className="font-pixel text-arcade-green text-sm border-2 border-arcade-green
+      className="font-pixel text-arcade-green text-base border-2 border-arcade-green
                  bg-arcade-panel flex items-center justify-center aspect-square
                  active:bg-arcade-green active:text-arcade-bg transition-colors select-none"
       style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'none' }}

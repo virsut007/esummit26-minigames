@@ -95,7 +95,7 @@ export default function LandingPage({
                        py-3 mb-4 hover:bg-arcade-green hover:border-arcade-green transition-all
                        shadow-[0_0_14px_#f1fa8c55] flex items-center justify-center gap-2"
           >
-            🏆 HALL OF FAME — VIEW ALL SCORES
+            🏆 HALL OF FAME
           </button>
 
           <h2 className="font-pixel text-arcade-gray text-[9px] tracking-widest text-center mb-4">

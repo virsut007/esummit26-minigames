@@ -13,15 +13,14 @@ export default function DinosaurGame({
   const saveRef   = useRef(saveScore)
   useEffect(() => { saveRef.current = saveScore }, [saveScore])
 
-  const [liveScore,  setLiveScore]  = useState(0)
   const [gameOver,   setGameOver]   = useState(false)
   const [finalScore, setFinalScore] = useState(0)
 
   useEffect(() => {
     if (!canvasRef.current) return
     const engine = new DinoEngine(canvasRef.current, {
-      onScoreUpdate: (s) => setLiveScore(s),
-      onGameOver:    (s) => { setFinalScore(s); setGameOver(true); saveRef.current(s) },
+      onScoreUpdate: () => {},
+      onGameOver: (s) => { setFinalScore(s); setGameOver(true); saveRef.current(s) },
     })
     engine.init()
     engineRef.current = engine
@@ -57,32 +56,22 @@ export default function DinosaurGame({
   const handleTap = useCallback((e) => { e.preventDefault(); engineRef.current?.jump() }, [])
 
   const handlePlayAgain = useCallback(() => {
-    setGameOver(false); setLiveScore(0); engineRef.current?.startGame()
+    setGameOver(false); engineRef.current?.startGame()
   }, [])
 
+  // Canvas fills the entire available area — score is drawn inside the canvas by the engine
   return (
-    // Fills the entire available area — no padding, edge-to-edge canvas
-    <div className="flex-1 flex flex-col overflow-hidden">
-
-      {/* Slim score bar */}
-      <div className="flex items-center justify-between px-3 py-1 flex-shrink-0">
-        <span className="font-pixel text-arcade-green text-[10px] drop-shadow-[0_0_6px_#50fa7b]">DINO RUN</span>
-        <span className="font-pixel text-arcade-yellow text-[10px]">{liveScore}</span>
-      </div>
-
-      {/* Canvas — edge to edge, fills all remaining height */}
-      <div className="relative flex-1 min-h-0">
-        <canvas
-          ref={canvasRef}
-          onClick={handleTap}
-          onTouchStart={handleTap}
-          className="block w-full h-full cursor-pointer select-none"
-          style={{ touchAction: 'none', objectFit: 'contain' }}
-        />
-        {gameOver && (
-          <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} />
-        )}
-      </div>
+    <div className="flex-1 relative overflow-hidden">
+      <canvas
+        ref={canvasRef}
+        onClick={handleTap}
+        onTouchStart={handleTap}
+        className="block w-full h-full cursor-pointer select-none"
+        style={{ touchAction: 'none' }}
+      />
+      {gameOver && (
+        <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} />
+      )}
     </div>
   )
 }
