@@ -22,8 +22,8 @@ export const GAMES = [
   {
     id:          'snake',
     name:        'SNAKE',
-    description: 'Coming soon...',
-    available:   false,
+    description: 'Eat, grow, survive!',
+    available:   true,
   },
   {
     id:          'space',
