@@ -2,8 +2,8 @@ import { drawFace } from '../../skinRenderer'
 
 // ─── Game Constants ───────────────────────────────────────────────────────────
 export const GAME_W   = 800
-export const GAME_H   = 300
-const GROUND_Y        = 240   // y of the ground line
+export const GAME_H   = 450
+const GROUND_Y        = 360   // y of the ground line
 const DINO_X          = 70
 const DINO_W          = 44
 const DINO_H          = 52
@@ -210,7 +210,7 @@ export class DinoEngine {
     // Stars (pseudo-random, static pattern)
     ctx.fillStyle = 'rgba(255,255,255,0.25)'
     for (let i = 0; i < 24; i++) {
-      ctx.fillRect((i * 43 + 11) % GAME_W, (i * 37 + 7) % 170, 2, 2)
+      ctx.fillRect((i * 43 + 11) % GAME_W, (i * 37 + 7) % 250, 2, 2)
     }
 
     // Clouds
@@ -258,7 +258,7 @@ export class DinoEngine {
     // Stars
     ctx.fillStyle = 'rgba(255,255,255,0.25)'
     for (let i = 0; i < 24; i++) {
-      ctx.fillRect((i * 43 + 11) % GAME_W, (i * 37 + 7) % 170, 2, 2)
+      ctx.fillRect((i * 43 + 11) % GAME_W, (i * 37 + 7) % 250, 2, 2)
     }
 
     // Ground

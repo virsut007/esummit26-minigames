@@ -1,13 +1,21 @@
 import { GAMES } from '../games'
+import SkinSelector from './SkinSelector'
 
-// ── Ad images ─────────────────────────────────────────────────────────────────
-// Drop your banner images into /public/ads/ and set the paths below.
-// Set to null to show the placeholder outline instead.
+// ── Ad Banner Configuration ────────────────────────────────────────────────────
+// Drop your banner images into /public/ads/ and update these paths.
 const AD_SUMMIT_SRC = null   // e.g. '/ads/esummit-banner.jpg'
 const AD_APOGEE_SRC = null   // e.g. '/ads/apogee-banner.jpg'
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function LandingPage({ onSelectGame, user, onSignOut }) {
+export default function LandingPage({
+  onSelectGame,
+  user,
+  onSignOut,
+  onLeaderboard,
+  selectedSkin,
+  onSkinChange,
+  imgCache,
+}) {
   return (
     <div className="min-h-screen bg-arcade-bg text-white flex flex-col">
 
@@ -34,59 +42,79 @@ export default function LandingPage({ onSelectGame, user, onSignOut }) {
             </span>
           </div>
 
-          {user.id !== 'guest' && (
-            <div className="flex items-center gap-2">
-              <span className="hidden sm:block font-mono text-arcade-gray text-xs truncate max-w-[160px]"
-                    title={user.email}>
-                {user.email}
-              </span>
-              <button
-                onClick={onSignOut}
-                className="font-pixel text-[9px] text-arcade-red border-2 border-arcade-red
-                           px-2 py-1.5 hover:bg-arcade-red hover:text-arcade-bg transition-all"
-              >
-                SIGN OUT
-              </button>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {/* Leaderboard button */}
+            <button
+              onClick={onLeaderboard}
+              className="font-pixel text-[9px] text-arcade-yellow border-2 border-arcade-yellow
+                         px-2 py-1.5 hover:bg-arcade-yellow hover:text-arcade-bg transition-all"
+            >
+              🏆 SCORES
+            </button>
+
+            {user.id !== 'guest' && (
+              <>
+                <span className="hidden sm:block font-mono text-arcade-gray text-xs truncate max-w-[140px]"
+                      title={user.email}>
+                  {user.email}
+                </span>
+                <button
+                  onClick={onSignOut}
+                  className="font-pixel text-[9px] text-arcade-red border-2 border-arcade-red
+                             px-2 py-1.5 hover:bg-arcade-red hover:text-arcade-bg transition-all"
+                >
+                  OUT
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-6 py-6 sm:py-10 flex flex-col gap-8 sm:gap-10">
+      <main className="flex-1 w-full max-w-lg mx-auto px-4 py-6 flex flex-col gap-7">
 
         {/* ── Hero ── */}
         <section className="text-center">
-          <p className="font-pixel text-arcade-gray text-[9px] sm:text-xs tracking-widest mb-3">
+          <p className="font-pixel text-arcade-gray text-[9px] tracking-widest mb-2">
             PRESENTS
           </p>
-          <h1 className="font-pixel text-2xl sm:text-4xl md:text-5xl tracking-tight leading-tight">
+          <h1 className="font-pixel text-3xl sm:text-4xl tracking-tight leading-tight">
             <span className="text-arcade-green drop-shadow-[0_0_12px_#50fa7b]">MINI</span>
             {' '}
             <span className="text-arcade-yellow drop-shadow-[0_0_12px_#f1fa8c]">ARCADE</span>
           </h1>
-          <p className="font-pixel text-arcade-gray text-[9px] sm:text-xs mt-3 animate-blink">
+          <p className="font-pixel text-arcade-gray text-[9px] mt-2 animate-blink">
             INSERT COIN TO PLAY
           </p>
         </section>
 
-        {/* ── Game Selection — main focus ── */}
+        {/* ── Character / Skin Selector ── */}
+        <section className="bg-arcade-panel border-2 border-arcade-cyan/40 px-4 py-3
+                            shadow-[0_0_12px_#8be9fd22]">
+          <p className="font-pixel text-arcade-cyan text-[9px] tracking-widest mb-3 text-center">
+            ── CHOOSE YOUR CHARACTER ──
+          </p>
+          <SkinSelector selectedId={selectedSkin} onSelect={onSkinChange} imgCache={imgCache} />
+        </section>
+
+        {/* ── Game Selection ── */}
         <section>
-          <h2 className="font-pixel text-arcade-gray text-[9px] sm:text-xs text-center mb-5 tracking-widest">
+          <h2 className="font-pixel text-arcade-gray text-[9px] text-center mb-4 tracking-widest">
             ── SELECT YOUR GAME ──
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5">
+          <div className="grid grid-cols-2 gap-3">
             {GAMES.map(game => (
               <GameCard key={game.id} game={game} onSelect={onSelectGame} />
             ))}
           </div>
         </section>
 
-        {/* ── Event Ad Banners — secondary ── */}
+        {/* ── Event Ad Banners ── */}
         <section>
-          <h2 className="font-pixel text-arcade-gray text-[9px] sm:text-xs text-center mb-4 tracking-widest">
+          <h2 className="font-pixel text-arcade-gray text-[9px] text-center mb-3 tracking-widest">
             ── EVENTS ──
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-3">
             <AdBanner
               src={AD_SUMMIT_SRC}
               label="E-SUMMIT 2026"
@@ -106,8 +134,8 @@ export default function LandingPage({ onSelectGame, user, onSignOut }) {
 
       </main>
 
-      <footer className="text-center py-4 border-t-2 border-arcade-gray/20 mt-4">
-        <p className="font-pixel text-arcade-gray text-[9px] sm:text-xs">
+      <footer className="text-center py-4 border-t-2 border-arcade-gray/20">
+        <p className="font-pixel text-arcade-gray text-[9px]">
           E-SUMMIT × APOGEE 2026 MINI ARCADE
         </p>
       </footer>
@@ -118,7 +146,7 @@ export default function LandingPage({ onSelectGame, user, onSignOut }) {
 function AdBanner({ src, label, accentColor, borderClass, glowClass }) {
   return (
     <div className={`border-2 ${borderClass} ${glowClass} overflow-hidden`}
-         style={{ aspectRatio: '16 / 6' }}>
+         style={{ aspectRatio: '16 / 5' }}>
       {src ? (
         <img
           src={src}
@@ -126,9 +154,8 @@ function AdBanner({ src, label, accentColor, borderClass, glowClass }) {
           className="w-full h-full object-cover"
         />
       ) : (
-        /* Placeholder shown until an image is provided */
         <div
-          className="w-full h-full flex flex-col items-center justify-center gap-2 bg-arcade-panel"
+          className="w-full h-full flex flex-col items-center justify-center gap-1.5 bg-arcade-panel"
           style={{
             backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.015) 10px, rgba(255,255,255,0.015) 11px)`,
           }}
@@ -139,8 +166,8 @@ function AdBanner({ src, label, accentColor, borderClass, glowClass }) {
           >
             {label}
           </span>
-          <span className="font-mono text-arcade-gray/40 text-[9px]">
-            ad banner · 16 : 6
+          <span className="font-mono text-arcade-gray/40 text-[8px]">
+            banner · 16 : 5
           </span>
         </div>
       )}
@@ -171,7 +198,7 @@ function GameCard({ game, onSelect }) {
       )}
 
       {/* Icon area */}
-      <div className="w-full h-16 flex items-center justify-center bg-arcade-dark border border-arcade-gray/20
+      <div className="w-full h-14 flex items-center justify-center bg-arcade-dark border border-arcade-gray/20
                       group-hover:border-arcade-green/50 transition-colors">
         <span className={`font-pixel text-xl ${ready ? 'text-arcade-green' : 'text-arcade-gray'}`}>
           {game.name.split(' ').map(w => w[0]).join('')}
@@ -183,7 +210,7 @@ function GameCard({ game, onSelect }) {
         <p className={`font-pixel text-[9px] sm:text-[10px] ${ready ? 'text-arcade-green' : 'text-arcade-gray'}`}>
           {game.name}
         </p>
-        <p className="font-mono text-arcade-gray text-[9px] mt-1 leading-tight">
+        <p className="font-mono text-arcade-gray text-[8px] mt-0.5 leading-tight">
           {game.description}
         </p>
       </div>

@@ -1,21 +1,22 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { DinoEngine, GAME_W, GAME_H } from './engine/gameEngine'
 import GameOverModal  from '../../components/GameOverModal'
-import ScoreHistory   from '../../components/ScoreHistory'
 import SkinSelector   from '../../components/SkinSelector'
 import { SKINS }      from '../skins'
 
-export default function DinosaurGame({ user, saveScore, scores, scoresLoading }) {
-  const canvasRef    = useRef(null)
-  const engineRef    = useRef(null)
-  const saveRef      = useRef(saveScore)
+export default function DinosaurGame({
+  user, saveScore, scores, scoresLoading,
+  selectedSkin, onSkinChange, imgCache, setImgCache,
+  currentGame,
+}) {
+  const canvasRef  = useRef(null)
+  const engineRef  = useRef(null)
+  const saveRef    = useRef(saveScore)
   useEffect(() => { saveRef.current = saveScore }, [saveScore])
 
-  const [liveScore,    setLiveScore]    = useState(0)
-  const [gameOver,     setGameOver]     = useState(false)
-  const [finalScore,   setFinalScore]   = useState(0)
-  const [selectedSkin, setSelectedSkin] = useState('default')
-  const [imgCache,     setImgCache]     = useState({})
+  const [liveScore,  setLiveScore]  = useState(0)
+  const [gameOver,   setGameOver]   = useState(false)
+  const [finalScore, setFinalScore] = useState(0)
 
   // ── Init engine ────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -61,7 +62,6 @@ export default function DinosaurGame({ user, saveScore, scores, scoresLoading })
           engineRef.current?.setSkin(skin, img)
         }
         img.onerror = () => {
-          // CORS or load failure — fall back to face style
           engineRef.current?.setSkin({ ...skin, type: 'face', color: skin.color, expression: 'happy' }, null)
         }
         img.src = skin.url
@@ -83,20 +83,20 @@ export default function DinosaurGame({ user, saveScore, scores, scoresLoading })
   }, [])
 
   return (
-    <div className="flex flex-col gap-4 sm:gap-5">
-      {/* Title bar */}
+    <div className="flex flex-col gap-3">
+      {/* Title + score */}
       <div className="flex items-center justify-between">
-        <h2 className="font-pixel text-arcade-green text-xs sm:text-sm drop-shadow-[0_0_6px_#50fa7b]">
+        <h2 className="font-pixel text-arcade-green text-xs drop-shadow-[0_0_6px_#50fa7b]">
           DINO RUN
         </h2>
-        <span className="font-pixel text-arcade-yellow text-xs sm:text-sm">{liveScore}</span>
+        <span className="font-pixel text-arcade-yellow text-xs">{liveScore}</span>
       </div>
 
       {/* Skin selector */}
-      <SkinSelector selectedId={selectedSkin} onSelect={setSelectedSkin} imgCache={imgCache} />
+      <SkinSelector selectedId={selectedSkin} onSelect={onSkinChange} imgCache={imgCache} />
 
-      {/* Canvas */}
-      <div className="relative border-2 sm:border-4 border-arcade-green shadow-[0_0_16px_#50fa7b44]">
+      {/* Canvas — full width, no max-width cap so it's as large as possible on phone */}
+      <div className="relative border-2 border-arcade-green shadow-[0_0_16px_#50fa7b44]">
         <canvas
           ref={canvasRef}
           onClick={handleTap}
@@ -104,18 +104,18 @@ export default function DinosaurGame({ user, saveScore, scores, scoresLoading })
           className="block w-full cursor-pointer select-none"
           style={{ touchAction: 'none', aspectRatio: `${GAME_W} / ${GAME_H}` }}
         />
-        {gameOver && <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} />}
+        {gameOver && (
+          <GameOverModal
+            score={finalScore}
+            onPlayAgain={handlePlayAgain}
+            currentGame={currentGame}
+          />
+        )}
       </div>
 
-      <p className="font-pixel text-arcade-gray text-[9px] sm:text-xs text-center">
-        SPACE / UP ARROW / TAP to jump
+      <p className="font-pixel text-arcade-gray text-[9px] text-center">
+        TAP to jump
       </p>
-
-      {scores.length > 0 && (
-        <div className="bg-arcade-panel border-2 border-arcade-gray/40 p-3 sm:p-4">
-          <ScoreHistory scores={scores} loading={scoresLoading} />
-        </div>
-      )}
     </div>
   )
 }

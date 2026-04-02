@@ -31,7 +31,7 @@ export async function getUserScores(user_id, game_name, limit = 10) {
 }
 
 /**
- * Fetch global top scores for a game — for the leaderboard (prepared, not wired to UI yet).
+ * Fetch global top scores for a game — for the leaderboard.
  */
 export async function getLeaderboard(game_name, limit = 10) {
   const { data, error } = await supabase
@@ -43,4 +43,15 @@ export async function getLeaderboard(game_name, limit = 10) {
 
   if (error) throw error
   return data ?? []
+}
+
+/**
+ * Fetch top scores for all games at once.
+ */
+export async function getAllLeaderboards(limit = 5) {
+  const games = ['dinosaur', 'flappy', 'snake', 'tetris']
+  const entries = await Promise.all(
+    games.map(g => getLeaderboard(g, limit).then(d => [g, d]))
+  )
+  return Object.fromEntries(entries)
 }

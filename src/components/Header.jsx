@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { GAMES } from '../games'
 
-export default function Header({ user, onSignOut, currentGame, onSelectGame, onHome }) {
+export default function Header({ user, onSignOut, currentGame, onSelectGame, onHome, onLeaderboard }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
@@ -56,6 +56,18 @@ export default function Header({ user, onSignOut, currentGame, onSelectGame, onH
               </>
             )}
 
+            {/* Leaderboard shortcut */}
+            {onLeaderboard && (
+              <button
+                onClick={onLeaderboard}
+                className="font-pixel text-[9px] text-arcade-yellow border-2 border-arcade-yellow
+                           px-2 py-1.5 hover:bg-arcade-yellow hover:text-arcade-bg transition-all
+                           hidden sm:block"
+              >
+                🏆
+              </button>
+            )}
+
             {/* Hamburger — mobile only */}
             <button
               className="sm:hidden flex flex-col justify-center items-center gap-[4px]
@@ -87,6 +99,15 @@ export default function Header({ user, onSignOut, currentGame, onSelectGame, onH
               currentGame={currentGame}
               onSelectGame={id => { onSelectGame(id); setMenuOpen(false) }}
             />
+            {onLeaderboard && (
+              <button
+                onClick={() => { onLeaderboard(); setMenuOpen(false) }}
+                className="font-pixel text-[9px] px-2 py-1.5 border-2 transition-all
+                           text-arcade-yellow border-arcade-yellow hover:bg-arcade-yellow hover:text-arcade-bg"
+              >
+                🏆 SCORES
+              </button>
+            )}
           </div>
         )}
       </div>
