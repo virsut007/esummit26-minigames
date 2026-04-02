@@ -88,7 +88,7 @@ export default function App() {
 
       <footer className="text-center py-4 border-t-2 border-arcade-gray/20 mt-4">
         <p className="font-pixel text-arcade-gray text-[9px] sm:text-xs">
-          SUMMIT × APOGEE MINI ARCADE © 2025
+          E-SUMMIT × APOGEE 2026 MINI ARCADE
         </p>
       </footer>
     </div>
