@@ -23,6 +23,7 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
   const [timeLeft,   setTimeLeft]   = useState(TIME_LIMIT)
   const [gameOver,   setGameOver]   = useState(false)
   const [finalScore, setFinalScore] = useState(0)
+  const [waiting,    setWaiting]    = useState(false)
 
   const triggerGameOver = useCallback((score) => {
     clearInterval(timerRef.current)
@@ -71,6 +72,19 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
     const id = setTimeout(() => startTimer(), 150)
     return () => clearTimeout(id)
   }, [startTimer])
+
+  // ── Key listener for waiting-to-start state ──────────────────────────────
+  useEffect(() => {
+    if (!waiting) return
+    const onKey = (e) => {
+      if (e.code === 'Space' || e.code === 'Enter' || e.code.startsWith('Arrow')) {
+        e.preventDefault()
+        handleStartFromWaiting()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [waiting, handleStartFromWaiting])
 
   // ── Keyboard ─────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -142,6 +156,11 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
     setLiveScore(0)
     setLines(0)
     setLevel(1)
+    setWaiting(true)
+  }, [])
+
+  const handleStartFromWaiting = useCallback(() => {
+    setWaiting(false)
     engineRef.current?.startGame()
     startTimer()
   }, [startTimer])
@@ -175,6 +194,16 @@ export default function TetrisGame({ user, saveScore, currentGame }) {
             className="block cursor-pointer select-none"
             style={{ touchAction: 'none' }}
           />
+          {waiting && (
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center bg-arcade-bg/85 cursor-pointer"
+              onClick={handleStartFromWaiting}
+              onTouchStart={handleStartFromWaiting}
+            >
+              <p className="font-pixel text-arcade-green text-xs animate-blink">TAP TO START</p>
+              <p className="font-pixel text-arcade-gray text-[9px] mt-3">SPACE / CLICK</p>
+            </div>
+          )}
           {gameOver && (
             <GameOverModal score={finalScore} onPlayAgain={handlePlayAgain} currentGame={currentGame} user={user} />
           )}
