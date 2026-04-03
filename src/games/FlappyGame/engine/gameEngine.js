@@ -100,6 +100,21 @@ export class FlappyEngine {
     this._raf = requestAnimationFrame(this._loop)
   }
 
+  resetToIdle() {
+    if (this._raf) { cancelAnimationFrame(this._raf); this._raf = null }
+    this._clearIdle()
+    this.state      = 'idle'
+    this.frame      = 0
+    this.score      = 0
+    this.bird       = makeBird()
+    this.pipes      = []
+    this.groundOff  = 0
+    this.pipeTimer  = 0
+    this.idleTick   = 0
+    this._seedClouds()
+    this._idleBob()
+  }
+
   destroy() {
     if (this._raf) cancelAnimationFrame(this._raf)
     this._idleRaf && cancelAnimationFrame(this._idleRaf)
@@ -384,6 +399,21 @@ export class FlappyEngine {
     ctx.save()
     ctx.translate(BIRD_X + BIRD_W / 2, y + BIRD_H / 2)
     ctx.rotate(angle)
+
+    // Custom player — draw circular-cropped char-idle.png instead of pixel bird
+    if (this.skin?.id === 'custom' && this.skinImg) {
+      const img = this.skinImg
+      const r   = Math.max(BIRD_W, BIRD_H) / 2 + 2
+      ctx.beginPath()
+      ctx.arc(0, 0, r, 0, Math.PI * 2)
+      ctx.clip()
+      // Use the top 40% of the portrait image (face area)
+      const srcW = img.naturalWidth
+      const srcH = Math.round(img.naturalHeight * 0.40)
+      ctx.drawImage(img, 0, 0, srcW, srcH, -r, -r, r * 2, r * 2)
+      ctx.restore()
+      return
+    }
 
     const bx = -BIRD_W / 2
     const by = -BIRD_H / 2
