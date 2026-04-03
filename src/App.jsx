@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth }   from './hooks/useAuth'
 import { useScores } from './hooks/useScores'
 
@@ -34,28 +34,6 @@ export default function App() {
   const [page,        setPage]        = useState('playerselect')
   const [currentGame, setCurrentGame] = useState('dinosaur')
 
-  // ── Browser history integration (back button support) ─────────────────────
-  // Seed the history stack on mount so the very first entry is trackable
-  useEffect(() => {
-    window.history.replaceState({ page: 'playerselect' }, '', '/')
-  }, [])
-
-  // Listen for native back/forward button presses
-  useEffect(() => {
-    const onPop = (e) => {
-      const p = e.state?.page
-      if (p) setPage(p)
-    }
-    window.addEventListener('popstate', onPop)
-    return () => window.removeEventListener('popstate', onPop)
-  }, [])
-
-  // navigate() — always use this instead of bare setPage for user-triggered nav
-  const navigate = useCallback((newPage) => {
-    window.history.pushState({ page: newPage }, '', '/')
-    setPage(newPage)
-  }, [])
-
   const [selectedSkin, setSelectedSkin] = useState('custom')
   const [imgCache,     setImgCache]     = useState({})
 
@@ -87,7 +65,7 @@ export default function App() {
     return (
       <PlayerSelectPage
         imgCache={imgCache}
-        onSelect={(skinId) => { setSelectedSkin(skinId); navigate('landing') }}
+        onSelect={(skinId) => { setSelectedSkin(skinId); setPage('landing') }}
       />
     )
   }
@@ -97,14 +75,14 @@ export default function App() {
       <LandingPage
         user={user}
         onSignOut={signOut}
-        onLeaderboard={() => navigate('leaderboard')}
-        onSelectGame={(id) => { setCurrentGame(id); navigate('game') }}
+        onLeaderboard={() => setPage('leaderboard')}
+        onSelectGame={(id) => { setCurrentGame(id); setPage('game') }}
       />
     )
   }
 
   if (page === 'leaderboard') {
-    return <AllLeaderboards onBack={() => navigate('landing')} />
+    return <AllLeaderboards onBack={() => setPage('landing')} />
   }
 
   const gameProps = {
@@ -127,7 +105,7 @@ export default function App() {
         onSignOut={signOut}
         currentGame={currentGame}
         onSelectGame={setCurrentGame}
-        onHome={() => navigate('landing')}
+        onHome={() => setPage('landing')}
       />
 
       {/* Game fills all remaining height, no scroll */}

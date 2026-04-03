@@ -75,11 +75,7 @@ export class DinoEngine {
     ]
     for (const [key, src] of entries) {
       const img = new Image()
-      img.onload = () => {
-        this.charImgs[key] = img
-        // Refresh idle screen once the first character image is ready
-        if (this.state === 'idle') this._renderIdle()
-      }
+      img.onload = () => { this.charImgs[key] = img }
       img.src = src
     }
   }
@@ -119,25 +115,7 @@ export class DinoEngine {
     this._raf = requestAnimationFrame(this._loop)
   }
 
-  setSkin(skin, img) {
-    this.skin    = skin
-    this.skinImg = img ?? null
-    if (this.state === 'idle') this._renderIdle()
-  }
-
-  resetToIdle() {
-    if (this._raf) { cancelAnimationFrame(this._raf); this._raf = null }
-    this.state           = 'idle'
-    this.dino            = makeDino()
-    this.obstacles       = []
-    this.airplanes       = makeAirplanes()
-    this.clouds          = []
-    this.obstacleCounter = 0
-    this.nextObstacleIn  = 90
-    this.groundOff       = 0
-    this._lastTs         = null
-    this._renderIdle()
-  }
+  setSkin(skin, img) { this.skin = skin; this.skinImg = img ?? null }
 
   destroy() { if (this._raf) cancelAnimationFrame(this._raf) }
 
