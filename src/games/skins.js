@@ -7,12 +7,12 @@
  */
 export const SKINS = [
   {
-    id:         'default',
-    label:      'DEFAULT',
-    type:       'default',
+    id:         'custom',
+    label:      'CHAR 1',
+    type:       'image',
     color:      '#50fa7b',
     expression: null,
-    url:        null,
+    url:        '/char-idle.png',
   },
   {
     id:         'vip',

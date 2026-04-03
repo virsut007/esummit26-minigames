@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react'
 import { useAuth }   from './hooks/useAuth'
 import { useScores } from './hooks/useScores'
 
-import AuthModal      from './components/Auth/AuthModal'
-import LandingPage    from './components/LandingPage'
-import Header         from './components/Header'
-import AllLeaderboards from './components/AllLeaderboards'
+import AuthModal        from './components/Auth/AuthModal'
+import LandingPage      from './components/LandingPage'
+import PlayerSelectPage from './components/PlayerSelectPage'
+import Header           from './components/Header'
+import AllLeaderboards  from './components/AllLeaderboards'
 import DinosaurGame   from './games/DinosaurGame/DinosaurGame'
 import FlappyGame     from './games/FlappyGame/FlappyGame'
 import TetrisGame     from './games/TetrisGame/TetrisGame'
@@ -30,10 +31,10 @@ function renderGame(currentGame, props) {
 
 export default function App() {
   const { user, loading, domainError, signInWithGoogle, signOut } = useAuth()
-  const [page,        setPage]        = useState('landing')
+  const [page,        setPage]        = useState('playerselect')
   const [currentGame, setCurrentGame] = useState('dinosaur')
 
-  const [selectedSkin, setSelectedSkin] = useState('default')
+  const [selectedSkin, setSelectedSkin] = useState('custom')
   const [imgCache,     setImgCache]     = useState({})
 
   const { scores, loading: scoresLoading, saveScore } = useScores(user, currentGame)
@@ -60,6 +61,15 @@ export default function App() {
     )
   }
 
+  if (page === 'playerselect') {
+    return (
+      <PlayerSelectPage
+        imgCache={imgCache}
+        onSelect={(skinId) => { setSelectedSkin(skinId); setPage('landing') }}
+      />
+    )
+  }
+
   if (page === 'landing') {
     return (
       <LandingPage
@@ -67,9 +77,6 @@ export default function App() {
         onSignOut={signOut}
         onLeaderboard={() => setPage('leaderboard')}
         onSelectGame={(id) => { setCurrentGame(id); setPage('game') }}
-        selectedSkin={selectedSkin}
-        onSkinChange={setSelectedSkin}
-        imgCache={imgCache}
       />
     )
   }
@@ -102,8 +109,11 @@ export default function App() {
       />
 
       {/* Game fills all remaining height, no scroll */}
-      <main className="flex-1 overflow-hidden flex flex-col">
-        {renderGame(currentGame, gameProps)}
+      {/* On desktop: center the game in a capped column so portrait games don't stretch */}
+      <main className="flex-1 overflow-hidden flex flex-col items-center bg-arcade-bg">
+        <div className="flex-1 overflow-hidden flex flex-col w-full lg:max-w-xl">
+          {renderGame(currentGame, gameProps)}
+        </div>
       </main>
     </div>
   )

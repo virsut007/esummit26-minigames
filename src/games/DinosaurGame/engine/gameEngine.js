@@ -305,10 +305,11 @@ export class DinoEngine {
     const ctx = this.ctx
     const { x, y, onGround, legFrame } = d
 
-    // ── Custom character images ───────────────────────────────────────────────
-    const charImg = onGround
-      ? (legFrame === 0 ? this.charImgs.run1 : this.charImgs.run2)
-      : this.charImgs.jump
+    // ── Custom character images (only for the custom/P1 player) ─────────────
+    const isCustomPlayer = !this.skin || this.skin.id === 'custom'
+    const charImg = isCustomPlayer
+      ? (onGround ? (legFrame === 0 ? this.charImgs.run1 : this.charImgs.run2) : this.charImgs.jump)
+      : null
 
     if (charImg) {
       // Draw slightly larger than the collision box, feet anchored to the ground

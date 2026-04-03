@@ -1,5 +1,4 @@
 import { GAMES } from '../games'
-import SkinSelector from './SkinSelector'
 
 // ── Ad Banner Configuration ────────────────────────────────────────────────────
 // Drop your banner images into /public/ads/ and update these paths.
@@ -12,9 +11,6 @@ export default function LandingPage({
   user,
   onSignOut,
   onLeaderboard,
-  selectedSkin,
-  onSkinChange,
-  imgCache,
 }) {
   return (
     <div className="min-h-screen bg-arcade-bg text-white flex flex-col">
@@ -69,7 +65,7 @@ export default function LandingPage({
         <div className="flex flex-col gap-7 lg:grid lg:gap-10 lg:items-start"
              style={{ gridTemplateColumns: 'minmax(0,2fr) minmax(0,3fr)' }}>
 
-          {/* ── Hero ── */}
+          {/* ── Hero — left col ── */}
           <section className="text-center lg:col-start-1 lg:row-start-1">
             <p className="font-pixel text-arcade-gray text-[9px] lg:text-[10px] tracking-widest mb-2">
               PRESENTS
@@ -84,16 +80,7 @@ export default function LandingPage({
             </p>
           </section>
 
-          {/* ── Character / Skin Selector ── */}
-          <section className="bg-arcade-panel border-2 border-arcade-cyan/40 px-4 lg:px-5 py-3 lg:py-4
-                              shadow-[0_0_12px_#8be9fd22] lg:col-start-1 lg:row-start-2">
-            <p className="font-pixel text-arcade-cyan text-[9px] lg:text-[10px] tracking-widest mb-3 text-center">
-              ── CHOOSE YOUR CHARACTER ──
-            </p>
-            <SkinSelector selectedId={selectedSkin} onSelect={onSkinChange} imgCache={imgCache} />
-          </section>
-
-          {/* ── Game Selection — right column on desktop, spans both hero+skin rows ── */}
+          {/* ── Game Selection — right col, spans hero+events rows ── */}
           <section className="lg:col-start-2 lg:row-start-1 lg:row-span-2">
             <button
               onClick={onLeaderboard}
@@ -114,8 +101,8 @@ export default function LandingPage({
             </div>
           </section>
 
-          {/* ── Event Ad Banners ── */}
-          <section className="lg:col-start-1 lg:row-start-3">
+          {/* ── Event Ad Banners — left col, row 2 ── */}
+          <section className="lg:col-start-1 lg:row-start-2">
             <h2 className="font-pixel text-arcade-gray text-[9px] lg:text-[10px] text-center mb-3 tracking-widest">
               ── EVENTS ──
             </h2>
