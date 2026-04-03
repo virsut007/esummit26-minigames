@@ -393,7 +393,7 @@ export class FlappyEngine {
     // Flappy bird image — draw it as a circle
     if (this.birdImg) {
       const img = this.birdImg
-      const r   = 36
+      const r   = 24
       ctx.imageSmoothingEnabled = true
       ctx.imageSmoothingQuality = 'high'
       ctx.beginPath()
