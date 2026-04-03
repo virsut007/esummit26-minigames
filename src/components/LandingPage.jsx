@@ -1,10 +1,25 @@
 import { GAMES } from '../games'
 
-// ── Ad Banner Configuration ────────────────────────────────────────────────────
-// Drop your banner images into /public/ads/ and update these paths.
-const AD_SUMMIT_SRC = null   // e.g. '/ads/esummit-banner.jpg'
-const AD_APOGEE_SRC = null   // e.g. '/ads/apogee-banner.jpg'
-// ─────────────────────────────────────────────────────────────────────────────
+const EVENTS = [
+  {
+    name: 'SOLVE FOR PILANI',
+    tag:  'Case Competition',
+    color: '#ff79c6',
+    url:  'https://docs.google.com/forms/d/e/1FAIpQLSdRWpjb8mxyIiBwPOX8K9NLQbZA5bhc6lfKOjBVoWbvpd4fNA/viewform',
+  },
+  {
+    name: 'DROPSHIPPING',
+    tag:  'Business Challenge',
+    color: '#ffb86c',
+    url:  'https://forms.gle/T9gQ2yYLxqL1dhMb7',
+  },
+  {
+    name: 'STARTUP EXPO',
+    tag:  'Showcase Your Idea',
+    color: '#8be9fd',
+    url:  'https://forms.gle/3D3svMtTo76Md6NZ9',
+  },
+]
 
 export default function LandingPage({
   onSelectGame,
@@ -101,26 +116,13 @@ export default function LandingPage({
             </div>
           </section>
 
-          {/* ── Event Ad Banners — left col, row 2 ── */}
+          {/* ── Event Registrations — left col, row 2 ── */}
           <section className="lg:col-start-1 lg:row-start-2">
             <h2 className="font-pixel text-arcade-gray text-[9px] lg:text-[10px] text-center mb-3 tracking-widest">
-              ── EVENTS ──
+              ── REGISTER NOW ──
             </h2>
             <div className="flex flex-col gap-3">
-              <AdBanner
-                src={AD_SUMMIT_SRC}
-                label="E-SUMMIT 2026"
-                accentColor="#50fa7b"
-                borderClass="border-arcade-green"
-                glowClass="shadow-[0_0_12px_#50fa7b33]"
-              />
-              <AdBanner
-                src={AD_APOGEE_SRC}
-                label="APOGEE 2026"
-                accentColor="#bd93f9"
-                borderClass="border-arcade-purple"
-                glowClass="shadow-[0_0_12px_#bd93f933]"
-              />
+              {EVENTS.map(event => <EventCard key={event.name} event={event} />)}
             </div>
           </section>
 
@@ -137,35 +139,44 @@ export default function LandingPage({
   )
 }
 
-function AdBanner({ src, label, accentColor, borderClass, glowClass }) {
+function EventCard({ event }) {
   return (
-    <div className={`border-2 ${borderClass} ${glowClass} overflow-hidden`}
-         style={{ aspectRatio: '16 / 5' }}>
-      {src ? (
-        <img
-          src={src}
-          alt={label}
-          className="w-full h-full object-cover"
-        />
-      ) : (
-        <div
-          className="w-full h-full flex flex-col items-center justify-center gap-1.5 bg-arcade-panel"
-          style={{
-            backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.015) 10px, rgba(255,255,255,0.015) 11px)`,
-          }}
-        >
+    <a
+      href={event.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block group"
+    >
+      <div
+        className="flex items-center justify-between gap-3 px-4 py-3 lg:py-4 transition-all
+                   group-hover:scale-[1.02] group-active:scale-[0.98]"
+        style={{
+          border:     `2px solid ${event.color}`,
+          boxShadow:  `0 0 14px ${event.color}33`,
+          background: '#0f0f23',
+          backgroundImage: 'repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,0.012) 10px,rgba(255,255,255,0.012) 11px)',
+        }}
+      >
+        <div className="flex flex-col gap-0.5 min-w-0">
           <span
-            className="font-pixel text-[9px] sm:text-[10px] tracking-widest"
-            style={{ color: accentColor }}
+            className="font-pixel text-[9px] sm:text-[10px] lg:text-xs tracking-wide leading-tight truncate"
+            style={{ color: event.color }}
           >
-            {label}
+            {event.name}
           </span>
-          <span className="font-mono text-arcade-gray/40 text-[8px]">
-            banner · 16 : 5
+          <span className="font-mono text-arcade-gray/50 text-[8px] lg:text-[9px] truncate">
+            {event.tag}
           </span>
         </div>
-      )}
-    </div>
+        <span
+          className="font-pixel text-[8px] sm:text-[9px] whitespace-nowrap flex-shrink-0
+                     px-2.5 py-1.5 transition-opacity group-hover:opacity-90"
+          style={{ background: event.color, color: '#0f0f23' }}
+        >
+          REGISTER →
+        </span>
+      </div>
+    </a>
   )
 }
 

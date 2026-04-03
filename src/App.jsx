@@ -64,8 +64,12 @@ export default function App() {
   if (page === 'playerselect') {
     return (
       <PlayerSelectPage
+ main
+        onSelect={(skinId) => { setSelectedSkin(skinId); navigate('landing') }}
+
         imgCache={imgCache}
         onSelect={(skinId) => { setSelectedSkin(skinId); setPage('landing') }}
+main
       />
     )
   }
