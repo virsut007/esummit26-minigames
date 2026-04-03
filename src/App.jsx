@@ -102,9 +102,9 @@ export default function App() {
       />
 
       {/* Game fills all remaining height, no scroll */}
-      <main className="flex-1 overflow-hidden flex flex-col">
+      <div className="flex-1 overflow-hidden flex flex-col">
         {renderGame(currentGame, gameProps)}
-      </main>
+      </div>
     </div>
   )
 }

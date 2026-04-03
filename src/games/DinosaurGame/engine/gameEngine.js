@@ -25,11 +25,15 @@ function makeDino() {
   return { x: DINO_X, y: GROUND_Y - DINO_H, vy: 0, onGround: true, legFrame: 0, legTimer: 0 }
 }
 
+// Fixed altitude lanes for each plane — spaced 145px apart so banners never overlap
+// Banner height = 118px, centred on (y + PLANE_H/2).  Each lane needs ≥ 120px gap.
+const PLANE_LANES = [65, 210, 355]
+
 function makeAirplanes() {
   return [
-    { x: GAME_W + 100,  y: 110, speed: 1.3, variant: 0 },
-    { x: GAME_W + 700,  y: 170, speed: 1.0, variant: 1 },
-    { x: GAME_W + 1350, y: 90,  speed: 1.6, variant: 0 },
+    { x: GAME_W + 100,  y: PLANE_LANES[0], speed: 1.3, variant: 0, lane: 0 },
+    { x: GAME_W + 700,  y: PLANE_LANES[1], speed: 1.0, variant: 1, lane: 1 },
+    { x: GAME_W + 1350, y: PLANE_LANES[2], speed: 1.6, variant: 2, lane: 2 },
   ]
 }
 
@@ -170,14 +174,14 @@ export class DinoEngine {
       this.clouds.push({ x: GAME_W + 20, y: 300 + Math.random() * 160, w: 60 + Math.random() * 60 })
     }
 
-    // Airplanes — slow, upper sky
+    // Airplanes — slow, upper sky; each plane stays in its fixed altitude lane
     for (const p of this.airplanes) {
       p.x -= p.speed * delta
       if (p.x + AIR_TOTAL < 0) {
         p.x       = GAME_W + 150 + Math.random() * 700
-        p.y       = 70 + Math.random() * 140
+        p.y       = PLANE_LANES[p.lane]
         p.speed   = 0.9 + Math.random() * 0.8
-        p.variant = Math.random() < 0.5 ? 0 : 1
+        p.variant = Math.floor(Math.random() * 3)   // variants 0–2
       }
     }
   }
@@ -453,25 +457,44 @@ export class DinoEngine {
     const cx = bx + BANNER_W / 2
 
     if (variant === 0) {
-      ctx.fillStyle = '#50fa7b'
-      ctx.font      = 'bold 28px "Press Start 2P", monospace'
-      ctx.fillText('E-SUMMIT', cx, by + 10)
-      ctx.fillStyle = '#6272a4'
-      ctx.font      = '18px "Press Start 2P", monospace'
-      ctx.fillText('× APOGEE 2026', cx, by + 46)
+      // Solve for Pilani
+      ctx.fillStyle = '#8be9fd'
+      ctx.font      = '9px "Press Start 2P", monospace'
+      ctx.fillText('REGISTER FOR', cx, by + 12)
       ctx.fillStyle = '#f1fa8c'
-      ctx.font      = 'bold 20px "Press Start 2P", monospace'
-      ctx.fillText('MINI ARCADE', cx, by + 74)
-    } else {
-      ctx.fillStyle = '#bd93f9'
-      ctx.font      = 'bold 28px "Press Start 2P", monospace'
-      ctx.fillText('APOGEE', cx, by + 10)
-      ctx.fillStyle = '#6272a4'
-      ctx.font      = '18px "Press Start 2P", monospace'
-      ctx.fillText('× E-SUMMIT 2026', cx, by + 46)
+      ctx.font      = 'bold 18px "Press Start 2P", monospace'
+      ctx.fillText('SOLVE FOR', cx, by + 32)
+      ctx.font      = 'bold 24px "Press Start 2P", monospace'
+      ctx.fillText('PILANI', cx, by + 60)
+      ctx.fillStyle = '#50fa7b'
+      ctx.font      = '9px "Press Start 2P", monospace'
+      ctx.fillText('E-SUMMIT 2026', cx, by + 96)
+    } else if (variant === 1) {
+      // Dropshipping Workshop
+      ctx.fillStyle = '#8be9fd'
+      ctx.font      = '9px "Press Start 2P", monospace'
+      ctx.fillText('REGISTER FOR', cx, by + 12)
       ctx.fillStyle = '#ffb86c'
-      ctx.font      = 'bold 20px "Press Start 2P", monospace'
-      ctx.fillText('PLAY & WIN!', cx, by + 74)
+      ctx.font      = 'bold 18px "Press Start 2P", monospace'
+      ctx.fillText('DROP-', cx, by + 34)
+      ctx.font      = 'bold 16px "Press Start 2P", monospace'
+      ctx.fillText('SHIPPING', cx, by + 60)
+      ctx.fillStyle = '#50fa7b'
+      ctx.font      = '9px "Press Start 2P", monospace'
+      ctx.fillText('E-SUMMIT 2026', cx, by + 96)
+    } else {
+      // Startup Expo
+      ctx.fillStyle = '#8be9fd'
+      ctx.font      = '9px "Press Start 2P", monospace'
+      ctx.fillText('REGISTER FOR', cx, by + 12)
+      ctx.fillStyle = '#bd93f9'
+      ctx.font      = 'bold 18px "Press Start 2P", monospace'
+      ctx.fillText('STARTUP', cx, by + 34)
+      ctx.font      = 'bold 22px "Press Start 2P", monospace'
+      ctx.fillText('EXPO', cx, by + 62)
+      ctx.fillStyle = '#50fa7b'
+      ctx.font      = '9px "Press Start 2P", monospace'
+      ctx.fillText('E-SUMMIT 2026', cx, by + 96)
     }
 
     // Plane body (nose/cockpit on left since it flies left)

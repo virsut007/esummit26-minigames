@@ -47,7 +47,7 @@ export default function AllLeaderboards({ onBack }) {
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-lg lg:max-w-5xl mx-auto px-4 lg:px-10 py-6 lg:py-10">
+      <div className="flex-1 w-full max-w-lg lg:max-w-5xl mx-auto px-4 lg:px-10 py-6 lg:py-10">
 
         {loading ? (
           <p className="font-pixel text-arcade-green text-xs text-center animate-blink py-8">
@@ -119,7 +119,7 @@ export default function AllLeaderboards({ onBack }) {
           })}
           </div>
         )}
-      </main>
+      </div>
 
       <footer className="text-center py-4 md:py-6 border-t-2 border-arcade-gray/20">
         <p className="font-pixel text-arcade-gray text-[9px] md:text-[10px]">

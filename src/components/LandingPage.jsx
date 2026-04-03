@@ -60,7 +60,7 @@ export default function LandingPage({
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-lg lg:max-w-5xl xl:max-w-6xl mx-auto px-4 lg:px-10 py-6 lg:py-10">
+      <div className="flex-1 w-full max-w-lg lg:max-w-5xl xl:max-w-6xl mx-auto px-4 lg:px-10 py-6 lg:py-10">
 
         {/*
           Mobile  → single flex column (original order)
@@ -139,7 +139,7 @@ export default function LandingPage({
 
         </div>
 
-      </main>
+      </div>
 
       <footer className="text-center py-4 md:py-6 border-t-2 border-arcade-gray/20">
         <p className="font-pixel text-arcade-gray text-[9px] md:text-[10px]">
