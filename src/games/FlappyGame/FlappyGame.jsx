@@ -61,7 +61,6 @@ export default function FlappyGame({
 
   const handleTap = useCallback((e) => {
     e.preventDefault()
-    if (e.touches && e.touches.length > 1) return
     engineRef.current?.flap()
   }, [])
 
@@ -74,7 +73,8 @@ export default function FlappyGame({
     <div className="flex-1 relative overflow-hidden">
       <canvas
         ref={canvasRef}
-        onPointerDown={handleTap}
+        onClick={handleTap}
+        onTouchStart={handleTap}
         className="block w-full h-full cursor-pointer select-none"
         style={{ touchAction: 'none' }}
       />

@@ -390,7 +390,6 @@ export class FlappyEngine {
     ctx.translate(BIRD_X + BIRD_W / 2, y + BIRD_H / 2)
     ctx.rotate(angle)
 
- main
     // Flappy bird image — draw it as a circle
     if (this.birdImg) {
       const img = this.birdImg
@@ -405,7 +404,6 @@ export class FlappyEngine {
       return
     }
 
- main
     const bx = -BIRD_W / 2
     const by = -BIRD_H / 2
 
