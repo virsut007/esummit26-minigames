@@ -24,6 +24,12 @@ export default function FlappyGame({
     })
     engine.init()
     engineRef.current = engine
+
+    const birdImg = new Image()
+    birdImg.crossOrigin = 'anonymous'
+    birdImg.onload = () => engine.setBirdImg(birdImg)
+    birdImg.src = '/flappy-bird.png'
+
     return () => engine.destroy()
   }, [])
 

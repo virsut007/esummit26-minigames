@@ -3,9 +3,23 @@ import { getLeaderboard } from '../services/supabase/scores'
 import ScoreShareCard from './ScoreShareCard'
 import { generateShareImage } from '../utils/generateShareImage'
 
-// ── Banner / Hoarding Configuration ───────────────────────────────────────────
-const BANNER_SRC = null   // e.g. '/ads/esummit-hoarding.jpg'
-// ─────────────────────────────────────────────────────────────────────────────
+const EVENTS = [
+  {
+    name:  'SOLVE FOR PILANI',
+    color: '#ff79c6',
+    url:   'https://docs.google.com/forms/d/e/1FAIpQLSdRWpjb8mxyIiBwPOX8K9NLQbZA5bhc6lfKOjBVoWbvpd4fNA/viewform',
+  },
+  {
+    name:  'DROPSHIPPING',
+    color: '#ffb86c',
+    url:   'https://forms.gle/T9gQ2yYLxqL1dhMb7',
+  },
+  {
+    name:  'STARTUP EXPO',
+    color: '#8be9fd',
+    url:   'https://forms.gle/3D3svMtTo76Md6NZ9',
+  },
+]
 
 const RANK_COLOR = ['#f1fa8c', '#8be9fd', '#ffb86c']
 
@@ -112,30 +126,40 @@ export default function GameOverModal({ score, onPlayAgain, currentGame, user = 
         />
       </div>
 
-      {/* ── Banner / Hoarding ── */}
-      <div className="w-full flex-shrink-0 border-b-2 border-arcade-gray/30"
-           style={{ aspectRatio: '16 / 5' }}>
-        {BANNER_SRC ? (
-          <img
-            src={BANNER_SRC}
-            alt="Event hoarding"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div
-            className="w-full h-full flex flex-col items-center justify-center gap-1 bg-arcade-panel"
-            style={{
-              backgroundImage: 'repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,0.015) 10px,rgba(255,255,255,0.015) 11px)',
-            }}
-          >
-            <span className="font-pixel text-arcade-green text-[9px] sm:text-[11px] tracking-widest">
-              E-SUMMIT × APOGEE 2026
-            </span>
-            <span className="font-mono text-arcade-gray/40 text-[8px]">
-              hoarding banner · 16 : 5
-            </span>
-          </div>
-        )}
+      {/* ── Event Registrations Strip ── */}
+      <div className="w-full flex-shrink-0 border-b-2 border-arcade-gray/30 bg-arcade-panel px-4 py-3">
+        <p className="font-pixel text-arcade-gray/60 text-[8px] text-center mb-2.5 tracking-widest">
+          ── REGISTER FOR EVENTS ──
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {EVENTS.map(event => (
+            <a
+              key={event.name}
+              href={event.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between gap-2 px-3 py-2 transition-opacity hover:opacity-80 active:opacity-60"
+              style={{
+                border:     `1.5px solid ${event.color}`,
+                boxShadow:  `0 0 8px ${event.color}22`,
+                background: '#0f0f23',
+              }}
+            >
+              <span
+                className="font-pixel text-[7px] sm:text-[8px] leading-tight"
+                style={{ color: event.color }}
+              >
+                {event.name}
+              </span>
+              <span
+                className="font-pixel text-[7px] whitespace-nowrap flex-shrink-0 px-1.5 py-1"
+                style={{ background: event.color, color: '#0f0f23' }}
+              >
+                REG →
+              </span>
+            </a>
+          ))}
+        </div>
       </div>
 
       {/* ── Game Over content ── */}

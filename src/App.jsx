@@ -86,7 +86,6 @@ export default function App() {
   if (page === 'playerselect') {
     return (
       <PlayerSelectPage
-        imgCache={imgCache}
         onSelect={(skinId) => { setSelectedSkin(skinId); navigate('landing') }}
       />
     )

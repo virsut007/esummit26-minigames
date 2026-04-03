@@ -47,8 +47,9 @@ export class FlappyEngine {
     this.pipeTimer = 0
     this.idleTick  = 0   // for idle bob animation
 
-    this.skin    = null
-    this.skinImg = null
+    this.skin     = null
+    this.skinImg  = null
+    this.birdImg  = null
 
     this._raf    = null
     this._lastTs = null
@@ -59,6 +60,10 @@ export class FlappyEngine {
   setSkin(skin, img) {
     this.skin    = skin
     this.skinImg = img ?? null
+  }
+
+  setBirdImg(img) {
+    this.birdImg = img
   }
 
   // ─── Public API ────────────────────────────────────────────────────────────
@@ -400,17 +405,16 @@ export class FlappyEngine {
     ctx.translate(BIRD_X + BIRD_W / 2, y + BIRD_H / 2)
     ctx.rotate(angle)
 
-    // Custom player — draw circular-cropped char-idle.png instead of pixel bird
-    if (this.skin?.id === 'custom' && this.skinImg) {
-      const img = this.skinImg
-      const r   = Math.max(BIRD_W, BIRD_H) / 2 + 2
+    // Flappy bird image — draw it as a circle
+    if (this.birdImg) {
+      const img = this.birdImg
+      const r   = 36
+      ctx.imageSmoothingEnabled = true
+      ctx.imageSmoothingQuality = 'high'
       ctx.beginPath()
       ctx.arc(0, 0, r, 0, Math.PI * 2)
       ctx.clip()
-      // Use the top 40% of the portrait image (face area)
-      const srcW = img.naturalWidth
-      const srcH = Math.round(img.naturalHeight * 0.40)
-      ctx.drawImage(img, 0, 0, srcW, srcH, -r, -r, r * 2, r * 2)
+      ctx.drawImage(img, -r, -r, r * 2, r * 2)
       ctx.restore()
       return
     }
