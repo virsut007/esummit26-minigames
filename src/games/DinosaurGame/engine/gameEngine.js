@@ -31,9 +31,9 @@ const PLANE_LANES = [65, 210, 355]
 
 function makeAirplanes() {
   return [
-    { x: GAME_W + 100,  y: PLANE_LANES[0], speed: 1.3, variant: 0, lane: 0 },
-    { x: GAME_W + 700,  y: PLANE_LANES[1], speed: 1.0, variant: 1, lane: 1 },
-    { x: GAME_W + 1350, y: PLANE_LANES[2], speed: 1.6, variant: 2, lane: 2 },
+    { x: GAME_W + 100,  y: PLANE_LANES[0], speed: 2.0, variant: 0, lane: 0 },
+    { x: GAME_W + 500,  y: PLANE_LANES[1], speed: 1.6, variant: 1, lane: 1 },
+    { x: GAME_W + 900,  y: PLANE_LANES[2], speed: 2.4, variant: 2, lane: 2 },
   ]
 }
 
@@ -178,9 +178,9 @@ export class DinoEngine {
     for (const p of this.airplanes) {
       p.x -= p.speed * delta
       if (p.x + AIR_TOTAL < 0) {
-        p.x       = GAME_W + 150 + Math.random() * 700
+        p.x       = GAME_W + 80 + Math.random() * 350
         p.y       = PLANE_LANES[p.lane]
-        p.speed   = 0.9 + Math.random() * 0.8
+        p.speed   = 1.5 + Math.random() * 1.0
         p.variant = Math.floor(Math.random() * 3)   // variants 0–2
       }
     }
