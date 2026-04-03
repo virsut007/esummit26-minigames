@@ -56,8 +56,7 @@ export default function DinosaurGame({
   const handleTap = useCallback((e) => { e.preventDefault(); engineRef.current?.jump() }, [])
 
   const handlePlayAgain = useCallback(() => {
-    setGameOver(false)
-    engineRef.current?.resetToIdle()
+    setGameOver(false); engineRef.current?.startGame()
   }, [])
 
   // Canvas fills the entire available area — score is drawn inside the canvas by the engine
