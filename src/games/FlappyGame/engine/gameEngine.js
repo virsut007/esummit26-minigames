@@ -73,9 +73,10 @@ export class FlappyEngine {
     octx.beginPath()
     octx.arc(r, r, r, 0, Math.PI * 2)
     octx.clip()
-    // Crop to the face only (top ~58% of the image, excluding the shirt/body)
-    const faceH = img.height * 0.58
-    octx.drawImage(img, 0, 0, img.width, faceH, 0, 0, r * 2, r * 2)
+    // Square crop centered on the face (top ~58% height, centered horizontally)
+    const faceSize = img.height * 0.58
+    const sx = (img.width - faceSize) / 2
+    octx.drawImage(img, sx, 0, faceSize, faceSize, 0, 0, r * 2, r * 2)
     this._birdCanvas = oc
   }
 
