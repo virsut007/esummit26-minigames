@@ -6,6 +6,7 @@ import { generateShareImage } from '../utils/generateShareImage'
 const EVENTS = [
   {
     name:  'SOLVE FOR PILANI',
+    tag:   'Get your own stall, win 40k',
     color: '#ff79c6',
     url:   'https://docs.google.com/forms/d/e/1FAIpQLSdRWpjb8mxyIiBwPOX8K9NLQbZA5bhc6lfKOjBVoWbvpd4fNA/viewform',
   },
@@ -145,11 +146,18 @@ export default function GameOverModal({ score, onPlayAgain, currentGame, user = 
                 background: '#0f0f23',
               }}
             >
-              <span
-                className="font-pixel text-[7px] sm:text-[8px] leading-tight"
-                style={{ color: event.color }}
-              >
-                {event.name}
+              <span className="flex flex-col gap-0.5 min-w-0">
+                <span
+                  className="font-pixel text-[7px] sm:text-[8px] leading-tight"
+                  style={{ color: event.color }}
+                >
+                  {event.name}
+                </span>
+                {event.tag && (
+                  <span className="font-mono text-arcade-gray/50 text-[7px] leading-tight truncate">
+                    {event.tag}
+                  </span>
+                )}
               </span>
               <span
                 className="font-pixel text-[7px] whitespace-nowrap flex-shrink-0 px-1.5 py-1"

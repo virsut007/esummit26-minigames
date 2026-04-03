@@ -73,7 +73,9 @@ export class FlappyEngine {
     octx.beginPath()
     octx.arc(r, r, r, 0, Math.PI * 2)
     octx.clip()
-    octx.drawImage(img, 0, 0, r * 2, r * 2)
+    // Crop to the face only (top ~58% of the image, excluding the shirt/body)
+    const faceH = img.height * 0.58
+    octx.drawImage(img, 0, 0, img.width, faceH, 0, 0, r * 2, r * 2)
     this._birdCanvas = oc
   }
 
@@ -412,26 +414,10 @@ export class FlappyEngine {
     const bx = -BIRD_W / 2
     const by = -BIRD_H / 2
 
-    // Body
-    ctx.fillStyle = '#f1fa8c'
-    ctx.fillRect(bx + 4, by + 3,  BIRD_W - 8, BIRD_H - 6)
-    ctx.fillRect(bx + 2, by + 6,  BIRD_W - 4, BIRD_H - 12)
-
-    // Belly (lighter)
-    ctx.fillStyle = '#ffffa8'
-    ctx.fillRect(bx + 8, by + 8,  BIRD_W - 16, BIRD_H - 14)
-
-    // Wing
-    const wingOffsets = [-5, 0, 4]   // up / mid / down
-    const wingY = by + 8 + wingOffsets[wingFrame]
-    ctx.fillStyle = '#d4c800'
-    ctx.fillRect(bx + 2, wingY, 14, 9)
-    ctx.fillRect(bx + 4, wingY + 9, 10, 4)
-
     const useSkin = this.skin && this.skin.type !== 'default'
 
     if (!useSkin) {
-      // Default pixel-art face
+      // Default pixel-art face only
       ctx.fillStyle = '#ffffff'
       ctx.fillRect(bx + BIRD_W - 14, by + 4, 10, 10)
       ctx.fillStyle = '#0f0f23'
@@ -443,7 +429,7 @@ export class FlappyEngine {
       ctx.fillStyle = '#e07800'
       ctx.fillRect(bx + BIRD_W - 3, by + 15, 7, 4)
     } else {
-      // Custom skin — overlay on the whole bird body (local space)
+      // Custom skin — face only
       drawFace(ctx, bx + 1, by + 1, BIRD_W - 2, BIRD_H - 2, this.skin, this.skinImg)
     }
 

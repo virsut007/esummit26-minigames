@@ -18,7 +18,12 @@
       "Bash(curl -L \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img2.png\" -o char-run1.png)",
       "Bash(curl -L \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img3.png\" -o char-run2.png)",
       "Bash(curl -L \"https://raw.githubusercontent.com/mr-rishuraj/esummit26-minigames/main/img4.png\" -o char-jump.png)",
-      "Bash(ls -la *.png)"
+      "Bash(ls -la *.png)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(git merge:*)",
+      "Bash(git commit:*)",
+      "Bash(ls:*)"
     ]
   }
 }
