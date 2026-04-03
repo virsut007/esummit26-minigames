@@ -2,8 +2,8 @@ import { GAMES } from '../games'
 
 const EVENTS = [
   {
-    name: 'SOLVE FOR PILANI',
-    tag:  'Get your own stall, win 40k',
+    name: 'STALL AT APOGEE',
+    tag:  'Get your own stall at apogee, win 40k',
     color: '#ff79c6',
     url:  'https://docs.google.com/forms/d/e/1FAIpQLSdRWpjb8mxyIiBwPOX8K9NLQbZA5bhc6lfKOjBVoWbvpd4fNA/viewform',
   },

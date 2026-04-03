@@ -9,13 +9,13 @@
 export const GAMES = [
   {
     id:          'dinosaur',
-    name:        'DINO RUN',
+    name:        'DINO YADAV',
     description: 'Jump over cacti!',
     available:   true,
   },
   {
     id:          'flappy',
-    name:        'FLAPPY',
+    name:        'FLAPPY SAJAL',
     description: 'Tap to flap through pipes!',
     available:   true,
   },
