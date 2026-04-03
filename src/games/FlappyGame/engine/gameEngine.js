@@ -105,21 +105,6 @@ export class FlappyEngine {
     this._raf = requestAnimationFrame(this._loop)
   }
 
-  resetToIdle() {
-    if (this._raf) { cancelAnimationFrame(this._raf); this._raf = null }
-    this._clearIdle()
-    this.state      = 'idle'
-    this.frame      = 0
-    this.score      = 0
-    this.bird       = makeBird()
-    this.pipes      = []
-    this.groundOff  = 0
-    this.pipeTimer  = 0
-    this.idleTick   = 0
-    this._seedClouds()
-    this._idleBob()
-  }
-
   destroy() {
     if (this._raf) cancelAnimationFrame(this._raf)
     this._idleRaf && cancelAnimationFrame(this._idleRaf)
@@ -405,6 +390,7 @@ export class FlappyEngine {
     ctx.translate(BIRD_X + BIRD_W / 2, y + BIRD_H / 2)
     ctx.rotate(angle)
 
+ main
     // Flappy bird image — draw it as a circle
     if (this.birdImg) {
       const img = this.birdImg
@@ -419,6 +405,7 @@ export class FlappyEngine {
       return
     }
 
+ main
     const bx = -BIRD_W / 2
     const by = -BIRD_H / 2
 

@@ -66,8 +66,7 @@ export default function FlappyGame({
   }, [])
 
   const handlePlayAgain = useCallback(() => {
-    setGameOver(false)
-    engineRef.current?.resetToIdle()
+    setGameOver(false); engineRef.current?.startGame()
   }, [])
 
   // Canvas fills the entire area — score is drawn inside canvas by the engine
