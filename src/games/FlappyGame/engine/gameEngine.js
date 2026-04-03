@@ -8,7 +8,7 @@ const BIRD_X            = 90
 const BIRD_W            = 34
 const BIRD_H            = 26
 const GRAVITY           = 0.46
-const FLAP_FORCE        = -7.0
+const FLAP_FORCE        = -8.2
 const PIPE_W            = 64
 const INITIAL_GAP       = 185
 const INITIAL_SPEED     = 3
@@ -47,9 +47,10 @@ export class FlappyEngine {
     this.pipeTimer = 0
     this.idleTick  = 0   // for idle bob animation
 
-    this.skin     = null
-    this.skinImg  = null
-    this.birdImg  = null
+    this.skin        = null
+    this.skinImg     = null
+    this.birdImg     = null
+    this._birdCanvas = null
 
     this._raf    = null
     this._lastTs = null
@@ -64,6 +65,16 @@ export class FlappyEngine {
 
   setBirdImg(img) {
     this.birdImg = img
+    // Pre-render the circular crop once so _drawBird never needs to clip
+    const r  = 24
+    const oc = document.createElement('canvas')
+    oc.width = oc.height = r * 2
+    const octx = oc.getContext('2d')
+    octx.beginPath()
+    octx.arc(r, r, r, 0, Math.PI * 2)
+    octx.clip()
+    octx.drawImage(img, 0, 0, r * 2, r * 2)
+    this._birdCanvas = oc
   }
 
   // ─── Public API ────────────────────────────────────────────────────────────
@@ -390,16 +401,10 @@ export class FlappyEngine {
     ctx.translate(BIRD_X + BIRD_W / 2, y + BIRD_H / 2)
     ctx.rotate(angle)
 
-    // Flappy bird image — draw it as a circle
-    if (this.birdImg) {
-      const img = this.birdImg
-      const r   = 24
-      ctx.imageSmoothingEnabled = true
-      ctx.imageSmoothingQuality = 'high'
-      ctx.beginPath()
-      ctx.arc(0, 0, r, 0, Math.PI * 2)
-      ctx.clip()
-      ctx.drawImage(img, -r, -r, r * 2, r * 2)
+    // Flappy bird image — drawn from pre-clipped offscreen canvas (no per-frame clip)
+    if (this._birdCanvas) {
+      const r = 24
+      ctx.drawImage(this._birdCanvas, -r, -r, r * 2, r * 2)
       ctx.restore()
       return
     }
