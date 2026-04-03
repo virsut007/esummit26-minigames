@@ -202,14 +202,6 @@ function GameCard({ game, onSelect }) {
         </div>
       )}
 
-      {/* Icon area */}
-      <div className="w-full h-14 lg:h-32 flex items-center justify-center bg-arcade-dark border border-arcade-gray/20
-                      group-hover:border-arcade-green/50 transition-colors">
-        <span className={`font-pixel text-xl lg:text-4xl ${ready ? 'text-arcade-green' : 'text-arcade-gray'}`}>
-          {game.name.split(' ').map(w => w[0]).join('')}
-        </span>
-      </div>
-
       {/* Game name + description */}
       <div className="w-full">
         <p className={`font-pixel text-[9px] sm:text-[10px] lg:text-xs ${ready ? 'text-arcade-green' : 'text-arcade-gray'}`}>
