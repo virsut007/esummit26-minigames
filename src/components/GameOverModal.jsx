@@ -26,11 +26,13 @@ const RANK_COLOR = ['#f1fa8c', '#8be9fd', '#ffb86c']
 
 // Human-readable game names used in the share text
 const GAME_LABEL = {
-  dinosaur: 'Dino Run 🦖',
-  flappy:   'Flappy Bird 🐦',
+  dinosaur: 'Dino Yadav 🦖',
+  flappy:   'Flappy Sajal 🐦',
   snake:    'Snake 🐍',
   tetris:   'Tetris 🎮',
 }
+
+const GAME_URL = 'https://esummit26-minigames.vercel.app'
 
 export default function GameOverModal({ score, onPlayAgain, currentGame, user = null }) {
   const [leaders,    setLeaders]    = useState([])
@@ -55,7 +57,7 @@ export default function GameOverModal({ score, onPlayAgain, currentGame, user = 
       const file = new File([blob], 'my-score.png', { type: 'image/png' })
 
       const gameLabel = GAME_LABEL[currentGame] ?? 'the Mini Arcade'
-      const shareText = `I just scored ${score.toLocaleString()} in ${gameLabel}! Can you beat me? 🎮`
+      const shareText = `I just scored ${score.toLocaleString()} in ${gameLabel}! Can you beat me? 🎮\n${GAME_URL}`
 
       // ── Mobile: native share sheet (best path — opens Instagram Stories etc.) ──
       if (navigator.canShare?.({ files: [file] })) {
@@ -63,7 +65,7 @@ export default function GameOverModal({ score, onPlayAgain, currentGame, user = 
           files: [file],
           title:  `Score: ${score.toLocaleString()} in ${gameLabel}`,
           text:   shareText,
-          url:    window.location.href,
+          url:    GAME_URL,
         })
         return
       }
@@ -73,7 +75,7 @@ export default function GameOverModal({ score, onPlayAgain, currentGame, user = 
         await navigator.share({
           title: `Score: ${score.toLocaleString()} in ${gameLabel}`,
           text:  shareText,
-          url:   window.location.href,
+          url:   GAME_URL,
         })
         return
       }
