@@ -120,16 +120,16 @@ const ScoreShareCard = forwardRef(function ScoreShareCard(
     if (!canvas) return
     loadCroppedChar('/char-idle.png').then(({ offscreen, minX, minY, cropW, cropH }) => {
       // Scale to fill body height, maintain aspect ratio
-      const drawH  = BODY_H
-      const drawW  = Math.round(drawH * (cropW / cropH))
+      const drawH = BODY_H
+      const drawW = Math.round(drawH * (cropW / cropH))
       canvas.width  = drawW
       canvas.height = drawH
-      // Update CSS size so the element takes proper space
       canvas.style.width  = `${drawW}px`
       canvas.style.height = `${drawH}px`
       const ctx = canvas.getContext('2d')
       ctx.drawImage(offscreen, minX, minY, cropW, cropH, 0, 0, drawW, drawH)
     }).catch(() => {})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [BODY_H])
 
   return (
@@ -197,35 +197,44 @@ const ScoreShareCard = forwardRef(function ScoreShareCard(
         </span>
       </div>
 
-      {/* ── CHARACTER canvas — left side, auto-cropped, full body height ── */}
-      <canvas
-        ref={charCanvasRef}
-        style={{
-          position:  'absolute',
-          left:      0,
-          top:       `${HEADER_H}px`,
-          height:    `${BODY_H}px`,
-          zIndex:    3,
-          pointerEvents: 'none',
-          filter:    `drop-shadow(6px 0 22px ${theme.glow}55)`,
-          display:   'block',
-        }}
-      />
+      {/* ── CHARACTER canvas — left side, clipped to 235px so it never bleeds into text ── */}
+      <div style={{
+        position:  'absolute',
+        left:      0,
+        top:       `${HEADER_H}px`,
+        width:     '235px',
+        height:    `${BODY_H}px`,
+        overflow:  'hidden',
+        zIndex:    3,
+        pointerEvents: 'none',
+      }}>
+        <canvas
+          ref={charCanvasRef}
+          style={{
+            position: 'absolute',
+            left:     0,
+            bottom:   0,
+            filter:   `drop-shadow(4px 0 18px ${theme.glow}55)`,
+            display:  'block',
+          }}
+        />
+      </div>
 
       {/* ── RIGHT PANEL — score + info ── */}
       <div style={{
         position:       'absolute',
         right:          0,
         top:            `${HEADER_H}px`,
-        width:          '220px',
+        width:          '215px',
         height:         `${BODY_H}px`,
         display:        'flex',
         flexDirection:  'column',
         alignItems:     'flex-start',
         justifyContent: 'center',
-        padding:        '0 20px',
+        padding:        '0 18px',
         zIndex:         4,
         boxSizing:      'border-box',
+        background:     'linear-gradient(to right, rgba(5,8,25,0.0) 0%, rgba(5,8,25,0.82) 18%, rgba(5,8,25,0.92) 100%)',
       }}>
 
         {/* Game emoji */}
