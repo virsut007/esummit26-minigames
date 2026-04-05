@@ -74,6 +74,12 @@ export default function PlayerSelectPage({ onSelect }) {
         <p className="font-pixel text-arcade-gray text-[9px]">
           E-SUMMIT × APOGEE 2026 MINI ARCADE
         </p>
+        <p className="font-pixel text-arcade-gray/40 text-[7px] mt-2 tracking-widest">
+          DEVELOPERS
+        </p>
+        <p className="font-mono text-arcade-gray/50 text-[8px] mt-1">
+          Srijan Sahay · Viren Suthar · Rishu Raj Gupta
+        </p>
       </footer>
     </div>
   )
