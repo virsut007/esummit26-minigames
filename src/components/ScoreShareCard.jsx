@@ -2,10 +2,10 @@ import { forwardRef, useEffect, useRef } from 'react'
 import { getPercentile } from '../utils/getPercentile'
 
 const GAME_META = {
-  dinosaur: { name: 'DINO RUN',    emoji: '🦖' },
-  flappy:   { name: 'FLAPPY BIRD', emoji: '🐦' },
-  snake:    { name: 'SNAKE',       emoji: '🐍' },
-  tetris:   { name: 'TETRIS',      emoji: '🎮' },
+  dinosaur: { name: 'DINO YADAV',   emoji: '🦖' },
+  flappy:   { name: 'FLAPPY SAJAL', emoji: '🐦' },
+  snake:    { name: 'SNAKE',        emoji: '🐍' },
+  tetris:   { name: 'TETRIS',       emoji: '🎮' },
 }
 
 const TIER_THEME = {
@@ -119,8 +119,8 @@ const ScoreShareCard = forwardRef(function ScoreShareCard(
     const canvas = charCanvasRef.current
     if (!canvas) return
     loadCroppedChar('/char-idle.png').then(({ offscreen, minX, minY, cropW, cropH }) => {
-      // Scale to fill body height, maintain aspect ratio
-      const drawH = BODY_H
+      // Scale to ~75% of body height so the full character is visible
+      const drawH = Math.round(BODY_H * 0.75)
       const drawW = Math.round(drawH * (cropW / cropH))
       canvas.width  = drawW
       canvas.height = drawH
@@ -249,9 +249,9 @@ const ScoreShareCard = forwardRef(function ScoreShareCard(
 
         {/* Game name */}
         <div style={{
-          fontSize:      '7px',
-          color:         'rgba(255,255,255,0.38)',
-          letterSpacing: '3px',
+          fontSize:      '11px',
+          color:         'rgba(255,255,255,0.75)',
+          letterSpacing: '2px',
           marginBottom:  '18px',
         }}>
           {meta.name}
