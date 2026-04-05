@@ -109,10 +109,9 @@ const ScoreShareCard = forwardRef(function ScoreShareCard(
   const theme     = TIER_THEME[pct.tier] ?? TIER_THEME.other
   const scoreSize = scoreFontSize(score)
 
-  const HEADER_H    = 72
-  const GAMETITLE_H = 58
-  const FOOTER_H    = 68
-  const BODY_H      = 800 - HEADER_H - GAMETITLE_H - FOOTER_H  // 602px
+  const HEADER_H = 72
+  const FOOTER_H = 68
+  const BODY_H   = 800 - HEADER_H - FOOTER_H  // 660px
 
   const charCanvasRef = useRef(null)
 
@@ -157,7 +156,7 @@ const ScoreShareCard = forwardRef(function ScoreShareCard(
       {/* Radial glow — right body area */}
       <div style={{
         position:  'absolute',
-        top:       `${HEADER_H + GAMETITLE_H + BODY_H * 0.45}px`,
+        top:       `${HEADER_H + BODY_H * 0.45}px`,
         left:      '72%',
         transform: 'translate(-50%, -50%)',
         width:     '300px', height: '300px',
@@ -198,37 +197,11 @@ const ScoreShareCard = forwardRef(function ScoreShareCard(
         </span>
       </div>
 
-      {/* ── GAME TITLE — full width, centred, below header ── */}
-      <div style={{
-        position:       'absolute',
-        top:            `${HEADER_H}px`,
-        left: 0, right: 0,
-        height:         `${GAMETITLE_H}px`,
-        display:        'flex',
-        alignItems:     'center',
-        justifyContent: 'center',
-        gap:            '12px',
-        borderBottom:   `1px solid ${theme.strip}`,
-        background:     'rgba(0,0,0,0.15)',
-        zIndex:         5,
-        boxSizing:      'border-box',
-      }}>
-        <span style={{ fontSize: '28px', lineHeight: 1 }}>{meta.emoji}</span>
-        <span style={{
-          fontSize:      '18px',
-          color:         theme.glow,
-          letterSpacing: '3px',
-          textShadow:    `0 0 16px ${theme.glow}80`,
-        }}>
-          {meta.name}
-        </span>
-      </div>
-
       {/* ── CHARACTER canvas — left side, clipped to 235px so it never bleeds into text ── */}
       <div style={{
         position:  'absolute',
         left:      0,
-        top:       `${HEADER_H + GAMETITLE_H}px`,
+        top:       `${HEADER_H}px`,
         width:     '235px',
         height:    `${BODY_H}px`,
         overflow:  'hidden',
@@ -247,11 +220,34 @@ const ScoreShareCard = forwardRef(function ScoreShareCard(
         />
       </div>
 
+      {/* ── GAME TITLE — floating overlay, full width centred, just above the character's chest ── */}
+      <div style={{
+        position:       'absolute',
+        top:            `${HEADER_H + 30}px`,
+        left: 0, right: 0,
+        display:        'flex',
+        alignItems:     'center',
+        justifyContent: 'center',
+        gap:            '12px',
+        zIndex:         6,
+        pointerEvents:  'none',
+      }}>
+        <span style={{ fontSize: '26px', lineHeight: 1 }}>{meta.emoji}</span>
+        <span style={{
+          fontSize:      '18px',
+          color:         theme.glow,
+          letterSpacing: '3px',
+          textShadow:    `0 0 18px ${theme.glow}, 0 0 40px ${theme.glow}60`,
+        }}>
+          {meta.name}
+        </span>
+      </div>
+
       {/* ── RIGHT PANEL — score + info ── */}
       <div style={{
         position:       'absolute',
         right:          0,
-        top:            `${HEADER_H + GAMETITLE_H}px`,
+        top:            `${HEADER_H}px`,
         width:          '215px',
         height:         `${BODY_H}px`,
         display:        'flex',
